@@ -1,20 +1,13 @@
 ---
-import '../styles/design-system.css';
-import AppNav from '../components/AppNav.astro';
+import AppLayout from '../layouts/AppLayout.astro';
 import Logo from '../components/Logo.astro';
 import SectionCard from '../components/editor/SectionCard.astro';
+import ConfigIntro from '../components/settings/ConfigIntro.astro';
+import WizardTabs from '../components/settings/WizardTabs.astro';
 ---
 
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Configuración — Cuenta de Cobro</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-
-  <style>
+<AppLayout title="Configuración — Cuenta de Cobro" current="configuracion" suffix="Configuración">
+  <style slot="head">
     body { padding: var(--page-pad) var(--page-pad) clamp(56px, 8vw, 80px); }
     .page { max-width: 1160px; margin: 0 auto; width: 100%; }
 
@@ -302,33 +295,9 @@ import SectionCard from '../components/editor/SectionCard.astro';
       }
     }
   </style>
-</head>
-<body>
-  <div class="page">
-    <AppNav current="configuracion" suffix="Configuración" />
 
-    <section class="config-intro" aria-labelledby="config-title">
-      <div>
-        <h1 id="config-title" class="config-title">Configuración guiada</h1>
-        <p class="config-copy">
-          Completa tus datos una vez y la app los usará en cada cuenta de cobro.
-          Puedes avanzar por pasos, revisar el resultado y guardar al final.
-        </p>
-      </div>
-      <p class="wizard-status" id="wizard-status">Paso 1 de 5</p>
-    </section>
-
-    <div class="wizard-progress" aria-hidden="true">
-      <div class="wizard-progress-bar" id="wizard-progress-bar"></div>
-    </div>
-
-    <div class="wizard-tabs" role="tablist" aria-label="Pasos de configuración">
-      <button class="wizard-tab is-active" type="button" data-step-target="0"><span>Paso 1</span>Identidad</button>
-      <button class="wizard-tab" type="button" data-step-target="1"><span>Paso 2</span>Pago</button>
-      <button class="wizard-tab" type="button" data-step-target="2"><span>Paso 3</span>Documento</button>
-      <button class="wizard-tab" type="button" data-step-target="3"><span>Paso 4</span>Marca</button>
-      <button class="wizard-tab" type="button" data-step-target="4"><span>Paso 5</span>Revisión</button>
-    </div>
+    <ConfigIntro />
+    <WizardTabs />
 
     <div class="settings-layout">
       <div class="form-panel">
@@ -544,9 +513,7 @@ import SectionCard from '../components/editor/SectionCard.astro';
         </div>
       </aside>
     </div>
-  </div>
-
-  <script>
+  <script slot="scripts">
     import {
       DEFAULT_SETTINGS,
       applySettingsToPage,
@@ -841,5 +808,4 @@ import SectionCard from '../components/editor/SectionCard.astro';
     populateForm(settings);
     showStep(0);
   </script>
-</body>
-</html>
+</AppLayout>

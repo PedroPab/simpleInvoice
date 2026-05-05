@@ -1,0 +1,39 @@
+---
+import '../styles/design-system.css';
+import AppNav from '../components/AppNav.astro';
+
+type NavKey = 'inicio' | 'cuenta' | 'editor' | 'historico' | 'configuracion';
+
+interface Props {
+  title: string;
+  current: NavKey;
+  suffix?: string;
+  pageClass?: string;
+}
+
+const {
+  title,
+  current,
+  suffix = '',
+  pageClass = 'page',
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <slot name="head" />
+  </head>
+  <body>
+    <div class={pageClass}>
+      <AppNav current={current} suffix={suffix} />
+      <slot />
+    </div>
+    <slot name="scripts" />
+  </body>
+</html>

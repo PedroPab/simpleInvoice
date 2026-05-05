@@ -1,18 +1,11 @@
 ---
-import '../styles/design-system.css';
-import AppNav from '../components/AppNav.astro';
+import AppLayout from '../layouts/AppLayout.astro';
+import HomeHero from '../components/home/HomeHero.astro';
+import QuickLinks from '../components/home/QuickLinks.astro';
 ---
 
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inicio — Cuenta de Cobro</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-
-  <style>
+<AppLayout title="Inicio — Cuenta de Cobro" current="inicio">
+  <style slot="head">
     body { padding: var(--page-pad) var(--page-pad) clamp(48px, 8vw, 72px); }
     .page { max-width: 1120px; margin: 0 auto; width: 100%; }
 
@@ -186,88 +179,15 @@ import AppNav from '../components/AppNav.astro';
       }
     }
   </style>
-</head>
-<body>
-  <div class="page">
-    <AppNav current="inicio" />
 
-    <main>
-      <section class="home-hero" aria-labelledby="home-title">
-        <div>
-          <p class="eyebrow">App local para cuentas de cobro</p>
-          <h1 id="home-title" class="home-title">Cuenta de Cobro</h1>
-          <p class="home-copy">
-            Configura tus datos una sola vez, crea cuentas para cada cliente,
-            revisa el documento final y conserva un histórico local en tu navegador.
-          </p>
-          <div class="hero-actions">
-            <a href="/configuracion" class="btn btn-primary btn-lg">Iniciar configuración</a>
-            <a href="/editor" class="btn btn-dark btn-lg">Crear cuenta</a>
-            <a href="/cuenta" class="btn btn-ghost btn-lg">Ver cuenta</a>
-          </div>
-        </div>
+  <main>
+    <HomeHero />
+    <QuickLinks />
+  </main>
 
-        <aside class="home-panel" aria-label="Flujo de uso">
-          <div class="panel-head">
-            <h2 class="panel-title">Empieza en orden</h2>
-            <p class="panel-copy">Un recorrido corto para dejar la app lista y generar el primer documento.</p>
-          </div>
-          <div class="flow-list">
-            <div class="flow-step">
-              <span class="step-number">01</span>
-              <div>
-                <p class="step-title">Configura tus datos</p>
-                <p class="step-copy">Nombre, identificación, contacto y datos bancarios del prestador.</p>
-              </div>
-            </div>
-            <div class="flow-step">
-              <span class="step-number">02</span>
-              <div>
-                <p class="step-title">Crea la cuenta</p>
-                <p class="step-copy">Agrega cliente, fechas, servicios, descuentos y retenciones.</p>
-              </div>
-            </div>
-            <div class="flow-step">
-              <span class="step-number">03</span>
-              <div>
-                <p class="step-title">Revisa y exporta</p>
-                <p class="step-copy">Abre la vista final para imprimir, descargar PDF o guardar Markdown.</p>
-              </div>
-            </div>
-            <div class="flow-step">
-              <span class="step-number">04</span>
-              <div>
-                <p class="step-title">Consulta el histórico</p>
-                <p class="step-copy">Busca cuentas guardadas, duplica documentos anteriores o edítalos.</p>
-              </div>
-            </div>
-          </div>
-        </aside>
-      </section>
+  <script slot="scripts">
+    import { initStaticPage } from '../scripts/page-lifecycle.js';
 
-      <section class="quick-links" aria-label="Accesos rápidos">
-        <a class="quick-link" href="/configuracion">
-          <strong>Configuración</strong>
-          <span>Actualiza datos personales, medios de pago y marca visual.</span>
-        </a>
-        <a class="quick-link" href="/editor">
-          <strong>Nueva cuenta</strong>
-          <span>Completa el documento variable para un cliente o servicio.</span>
-        </a>
-        <a class="quick-link" href="/historico">
-          <strong>Histórico</strong>
-          <span>Encuentra documentos guardados en la base local del navegador.</span>
-        </a>
-      </section>
-    </main>
-  </div>
-
-  <script>
-    import { applySettingsToPage, getSettings } from '../scripts/app-settings.js';
-    import { registerPwa } from '../scripts/invoice-store.js';
-
-    applySettingsToPage(getSettings());
-    registerPwa();
+    initStaticPage();
   </script>
-</body>
-</html>
+</AppLayout>

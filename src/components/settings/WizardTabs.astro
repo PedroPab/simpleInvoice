@@ -1,0 +1,19 @@
+---
+const tabs = ['Identidad', 'Pago', 'Documento', 'Marca', 'Revisión'];
+---
+
+<div class="wizard-progress" aria-hidden="true">
+  <div class="wizard-progress-bar" id="wizard-progress-bar"></div>
+</div>
+
+<div class="wizard-tabs" role="tablist" aria-label="Pasos de configuración">
+  {tabs.map((label, index) => (
+    <button
+      class:list={['wizard-tab', index === 0 && 'is-active']}
+      type="button"
+      data-step-target={index}
+    >
+      <span>Paso {index + 1}</span>{label}
+    </button>
+  ))}
+</div>

@@ -1,8 +1,8 @@
 ---
 import { PROVIDER } from '../config/provider';
 import defaultInvoice from '../data/invoice.default.json';
-import '../styles/design-system.css';
-import AppNav        from '../components/AppNav.astro';
+import AppLayout     from '../layouts/AppLayout.astro';
+import EditorActions from '../components/editor/EditorActions.astro';
 import SectionCard   from '../components/editor/SectionCard.astro';
 import JsonPreview   from '../components/editor/JsonPreview.astro';
 import TotalsPreview from '../components/editor/TotalsPreview.astro';
@@ -10,16 +10,8 @@ import TotalsPreview from '../components/editor/TotalsPreview.astro';
 const defaultData = JSON.stringify({ invoice: defaultInvoice, provider: PROVIDER });
 ---
 
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Editor — Cuenta de Cobro</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-
-  <style>
+<AppLayout title="Editor — Cuenta de Cobro" current="editor" suffix="Editor">
+  <style slot="head">
     body { padding: var(--page-pad) var(--page-pad) clamp(56px, 8vw, 80px); }
     .page { max-width: 1160px; margin: 0 auto; width: 100%; }
 
@@ -92,52 +84,8 @@ const defaultData = JSON.stringify({ invoice: defaultInvoice, provider: PROVIDER
       .editor-actions { grid-template-columns: 1fr; }
     }
   </style>
-</head>
-<body>
-  <div class="page">
 
-    <AppNav current="editor" suffix="Editor" />
-
-    <div class="editor-actions" aria-label="Acciones del editor">
-        <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/>
-          </svg>
-          Cargar JSON
-          <input type="file" id="json-upload" accept=".json" style="display:none;" />
-        </label>
-        <button class="btn btn-ghost btn-sm" id="btn-reset">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <polyline points="1 4 1 10 7 10"/>
-            <path d="M3.51 15a9 9 0 1 0 .49-4.7L1 10"/>
-          </svg>
-          Resetear
-        </button>
-        <button class="btn btn-dark btn-sm" id="btn-save">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-            <polyline points="17 21 17 13 7 13 7 21"/>
-            <polyline points="7 3 7 8 15 8"/>
-          </svg>
-          Guardar
-        </button>
-        <button class="btn btn-ghost btn-sm" id="btn-download-json">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-            <polyline points="7 10 12 15 17 10"/>
-            <line x1="12" y1="15" x2="12" y2="3"/>
-          </svg>
-          Descargar JSON
-        </button>
-        <a href="/cuenta" class="btn btn-primary btn-sm" id="btn-view-current">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
-            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-            <circle cx="12" cy="12" r="3"/>
-          </svg>
-          Ver factura
-        </a>
-    </div>
+    <EditorActions />
 
     <div class="editor-layout">
 
@@ -305,11 +253,9 @@ const defaultData = JSON.stringify({ invoice: defaultInvoice, provider: PROVIDER
     </div>
     <!-- /editor-layout -->
 
-  </div>
+  <script slot="scripts" type="application/json" id="default-data" set:html={defaultData}></script>
 
-  <script type="application/json" id="default-data" set:html={defaultData}></script>
-
-  <script>
+  <script slot="scripts">
     import {
       applySettingsToPage,
       getProviderFromSettings,
@@ -705,5 +651,4 @@ const defaultData = JSON.stringify({ invoice: defaultInvoice, provider: PROVIDER
 
     init();
   </script>
-</body>
-</html>
+</AppLayout>

@@ -1,21 +1,13 @@
 ---
-import '../styles/design-system.css';
-import AppNav from '../components/AppNav.astro';
+import AppLayout from '../layouts/AppLayout.astro';
+import HistoryHero from '../components/history/HistoryHero.astro';
 import defaultInvoice from '../data/invoice.default.json';
 
 const defaultData = JSON.stringify(defaultInvoice);
 ---
 
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Histórico — Cuenta de Cobro</title>
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-
-  <style is:global>
+<AppLayout title="Histórico — Cuenta de Cobro" current="historico" suffix="Histórico">
+  <style is:global slot="head">
     body { padding: var(--page-pad) var(--page-pad) clamp(56px, 8vw, 80px); }
     .page { max-width: 1080px; margin: 0 auto; width: 100%; }
 
@@ -171,172 +163,16 @@ const defaultData = JSON.stringify(defaultInvoice);
       }
     }
   </style>
-</head>
-<body>
-  <div class="page">
-    <AppNav current="historico" suffix="Histórico" />
 
-    <section class="history-hero">
-      <div>
-        <p class="eyebrow">Base local del navegador</p>
-        <h1 class="history-title">Histórico de cuentas</h1>
-        <p class="history-copy">
-          Las cuentas se guardan por cliente en IndexedDB. Puedes abrir, editar,
-          duplicar o eliminar cada registro sin depender de un backend.
-        </p>
-      </div>
-      <input
-        type="search"
-        id="history-search"
-        class="search-box"
-        placeholder="Buscar por cliente, NIT, número o título"
-      />
-    </section>
+  <HistoryHero />
+  <div id="history-root"></div>
 
-    <div id="history-root"></div>
-  </div>
+  <script slot="scripts" type="application/json" id="default-invoice" set:html={defaultData}></script>
 
-  <script type="application/json" id="default-invoice" set:html={defaultData}></script>
+  <script slot="scripts">
+    import { initHistoryPage } from '../scripts/pages/history-page.js';
 
-  <script>
-    import {
-      applySettingsToPage,
-      getSettings,
-    } from '../scripts/app-settings.js';
-    import {
-      deleteInvoiceRecord,
-      listInvoices,
-      migrateLegacyInvoice,
-      registerPwa,
-    } from '../scripts/invoice-store.js';
-
-    let invoices = [];
     const defaultInvoice = JSON.parse(document.getElementById('default-invoice').textContent);
-    const root = document.getElementById('history-root');
-    const search = document.getElementById('history-search');
-
-    function fmtDate(iso) {
-      if (!iso) return 'Sin fecha';
-      return new Date(iso).toLocaleDateString('es-CO', {
-        day: 'numeric',
-        month: 'short',
-        year: 'numeric',
-      });
-    }
-
-    function normalize(value) {
-      return String(value || '')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '')
-        .toLowerCase();
-    }
-
-    function escapeHtml(value) {
-      return String(value || '')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
-    }
-
-    function getSearchHaystack(record) {
-      const client = record.invoice?.client || {};
-      return normalize([
-        record.title,
-        record.documentNumber,
-        client.name,
-        client.nit,
-        client.contact,
-        client.email,
-      ].join(' '));
-    }
-
-    function groupByClient(records) {
-      const groups = new Map();
-      records.forEach(record => {
-        const name = record.invoice?.client?.name?.trim() || 'Cliente sin nombre';
-        if (!groups.has(record.clientKey)) groups.set(record.clientKey, { name, records: [] });
-        groups.get(record.clientKey).records.push(record);
-      });
-      return Array.from(groups.values());
-    }
-
-    function render() {
-      const query = normalize(search.value);
-      const filtered = query
-        ? invoices.filter(record => getSearchHaystack(record).includes(query))
-        : invoices;
-
-      if (!filtered.length) {
-        root.innerHTML = `
-          <div class="empty-state">
-            <strong>No hay cuentas para mostrar</strong>
-            <p>${query ? 'Prueba con otra búsqueda.' : 'Crea tu primera cuenta de cobro desde el editor.'}</p>
-          </div>
-        `;
-        return;
-      }
-
-      root.innerHTML = groupByClient(filtered).map(group => `
-        <section class="client-group">
-          <div class="client-heading">
-            <div class="client-name">${escapeHtml(group.name)}</div>
-            <div class="client-count">${group.records.length} cuenta${group.records.length === 1 ? '' : 's'}</div>
-          </div>
-          ${group.records.map(record => {
-            const client = record.invoice?.client || {};
-            return `
-              <article class="invoice-row">
-                <div>
-                  <p class="invoice-title">${escapeHtml(record.title)}</p>
-                  <div class="invoice-meta">
-                    <span>${escapeHtml(record.documentNumber)}</span>
-                    <span>${escapeHtml(client.nit || 'Sin NIT')}</span>
-                    <span>Actualizada ${fmtDate(record.updatedAt)}</span>
-                  </div>
-                </div>
-                <div class="invoice-actions">
-                  <a class="btn btn-primary btn-sm" href="/cuenta?id=${encodeURIComponent(record.id)}">Ver</a>
-                  <a class="btn btn-ghost btn-sm" href="/editor?id=${encodeURIComponent(record.id)}">Editar</a>
-                  <a class="btn btn-ghost btn-sm" href="/editor?duplicate=${encodeURIComponent(record.id)}">Duplicar</a>
-                  <button class="btn btn-ghost btn-sm danger-btn" data-delete-id="${escapeHtml(record.id)}">Eliminar</button>
-                </div>
-              </article>
-            `;
-          }).join('')}
-        </section>
-      `).join('');
-    }
-
-    async function refresh() {
-      invoices = await listInvoices();
-      render();
-    }
-
-    root.addEventListener('click', async event => {
-      const button = event.target.closest('[data-delete-id]');
-      if (!button) return;
-
-      const id = button.getAttribute('data-delete-id');
-      const record = invoices.find(item => item.id === id);
-      if (!confirm(`¿Eliminar ${record?.documentNumber || 'esta cuenta'}? Esta acción no se puede deshacer.`)) {
-        return;
-      }
-
-      await deleteInvoiceRecord(id);
-      await refresh();
-    });
-
-    search.addEventListener('input', render);
-
-    async function init() {
-      registerPwa();
-      applySettingsToPage(getSettings());
-      await migrateLegacyInvoice(defaultInvoice);
-      await refresh();
-    }
-
-    init();
+    initHistoryPage(defaultInvoice);
   </script>
-</body>
-</html>
+</AppLayout>

@@ -1,0 +1,28 @@
+---
+const links = [
+  {
+    href: '/configuracion',
+    title: 'Configuración',
+    copy: 'Actualiza datos personales, medios de pago y marca visual.',
+  },
+  {
+    href: '/editor',
+    title: 'Nueva cuenta',
+    copy: 'Completa el documento variable para un cliente o servicio.',
+  },
+  {
+    href: '/historico',
+    title: 'Histórico',
+    copy: 'Encuentra documentos guardados en la base local del navegador.',
+  },
+];
+---
+
+<section class="quick-links" aria-label="Accesos rápidos">
+  {links.map((link) => (
+    <a class="quick-link" href={link.href}>
+      <strong>{link.title}</strong>
+      <span>{link.copy}</span>
+    </a>
+  ))}
+</section>

@@ -9,6 +9,7 @@ export const PROVIDER = {
   name: "Nombre del Prestador",
   title: "Profesión o servicio",
   cc: "0000000000",
+  rut: "",
   email: "correo@ejemplo.com",
   phone: "+57 300 000 0000",
   city: "Ciudad, País",
@@ -19,5 +20,6 @@ export const PROVIDER = {
   accountNumber: "000 000000 00",
   accountHolder: "Nombre del titular",
   nequi: "+573000000000",
-  breve: "@usuario"
+  breve: "@usuario",
+  signatureDataUrl: ""
 } as const;

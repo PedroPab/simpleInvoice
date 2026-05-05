@@ -17,6 +17,7 @@ const { provider: prov, client } = Astro.props;
     <p class="party-detail" id="prov-detail">
       {prov.title}<br />
       NIT / CC: <span class="mono-val">{prov.cc}</span><br />
+      {prov.rut && <>RUT: <span class="mono-val">{prov.rut}</span><br /></>}
       <a href={`mailto:${prov.email}`}>{prov.email}</a><br />
       <span class="mono-val">{prov.phone}</span><br />
       {prov.city}

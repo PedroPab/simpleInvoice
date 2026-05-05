@@ -162,6 +162,13 @@ const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
         <PaymentInfo provider={PROVIDER} />
 
         <Notes notes={inv.notes} />
+
+        <div class="provider-signature" id="provider-signature-block" style={PROVIDER.signatureDataUrl ? '' : 'display:none;'}>
+          <img id="provider-signature-img" src={PROVIDER.signatureDataUrl} alt={`Firma de ${PROVIDER.name}`} />
+          <div class="provider-signature-line"></div>
+          <p class="provider-signature-name" id="provider-signature-name">{PROVIDER.name}</p>
+          <p class="provider-signature-id" id="provider-signature-id">CC / NIT: {PROVIDER.cc}</p>
+        </div>
       </div>
 
       <InvoiceFooter provider={PROVIDER} documentNumber={inv.documentNumber} />
@@ -281,6 +288,7 @@ const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
       document.getElementById('prov-detail').innerHTML =
         `${escapeHtml(prov.title)}<br>` +
         `NIT / CC: <span class="mono-val">${escapeHtml(prov.cc)}</span><br>` +
+        (prov.rut ? `RUT: <span class="mono-val">${escapeHtml(prov.rut)}</span><br>` : '') +
         `<a href="mailto:${escapeHtml(prov.email)}">${escapeHtml(prov.email)}</a><br>` +
         `<span class="mono-val">${escapeHtml(prov.phone)}</span><br>${escapeHtml(prov.city)}`;
 
@@ -317,8 +325,23 @@ const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
       document.getElementById('pay-account-number').textContent = prov.accountNumber;
       document.getElementById('pay-account-holder').textContent = prov.accountHolder;
       document.getElementById('pay-cc').textContent = prov.cc;
+      document.getElementById('pay-rut').textContent = prov.rut || '';
+      document.getElementById('pay-rut-row').style.display = prov.rut ? '' : 'none';
       document.getElementById('pay-nequi').textContent = prov.nequi;
       document.getElementById('pay-breve').textContent = prov.breve;
+
+      const signatureBlock = document.getElementById('provider-signature-block');
+      const signatureImg = document.getElementById('provider-signature-img');
+      signatureBlock.style.display = prov.signatureDataUrl ? '' : 'none';
+      if (prov.signatureDataUrl) {
+        signatureImg.src = prov.signatureDataUrl;
+        signatureImg.alt = `Firma de ${prov.name}`;
+      }
+      document.getElementById('provider-signature-name').textContent = prov.name;
+      document.getElementById('provider-signature-id').textContent = [
+        `CC / NIT: ${prov.cc}`,
+        prov.rut ? `RUT: ${prov.rut}` : '',
+      ].filter(Boolean).join(' · ');
 
       // Footer
       document.getElementById('footer-contact').textContent =
@@ -389,6 +412,7 @@ const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
         '## Prestador', '',
         `- **Nombre:** ${prov.name}`,
         `- **CC / NIT:** ${prov.cc}`,
+        prov.rut ? `- **RUT:** ${prov.rut}` : '',
         `- **Email:** ${prov.email}`,
         `- **Teléfono:** ${prov.phone}`,
         `- **Ciudad:** ${prov.city}`,
@@ -411,6 +435,7 @@ const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
         `- **N.° Cuenta:** ${prov.accountNumber}`,
         `- **Titular:** ${prov.accountHolder}`,
         `- **CC / NIT:** ${prov.cc}`,
+        prov.rut ? `- **RUT:** ${prov.rut}` : '',
         `- **Nequi / Daviplata:** ${prov.nequi}`,
         '', '---', '',
         '## Notas', '',

@@ -45,6 +45,10 @@ const { provider: prov } = Astro.props;
     <span class="payment-field-label">CC / NIT</span>
     <span class="payment-field-value" id="pay-cc">{prov.cc}</span>
   </div>
+  <div class="payment-field" id="pay-rut-row" style={prov.rut ? '' : 'display:none;'}>
+    <span class="payment-field-label">RUT</span>
+    <span class="payment-field-value" id="pay-rut">{prov.rut}</span>
+  </div>
   <div class="payment-field">
     <span class="payment-field-label">Nequi </span>
     <span class="payment-field-value" id="pay-nequi">{prov.nequi}</span>

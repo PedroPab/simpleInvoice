@@ -47,6 +47,7 @@ export interface Provider {
   name: string;
   title: string;
   cc: string;
+  rut: string;
   email: string;
   phone: string;
   city: string;
@@ -57,6 +58,7 @@ export interface Provider {
   accountHolder: string;
   nequi: string;
   breve: string;
+  signatureDataUrl: string;
 }
 
 export interface BrandSettings {

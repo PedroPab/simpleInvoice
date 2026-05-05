@@ -536,6 +536,39 @@ body {
 }
 .invoice-notes a { color: var(--gold-dark); }
 
+/* ── Provider signature ── */
+.provider-signature {
+  width: 280px;
+  margin: 0 0 36px auto;
+  text-align: center;
+  break-inside: avoid;
+}
+.provider-signature img {
+  display: block;
+  max-width: 220px;
+  max-height: 92px;
+  object-fit: contain;
+  margin: 0 auto 8px;
+}
+.provider-signature-line {
+  height: 1px;
+  background: var(--gray-400);
+  margin-bottom: 8px;
+}
+.provider-signature-name {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 3px;
+}
+.provider-signature-id {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
 /* ── Footer (dark strip) ── */
 .invoice-footer {
   background: var(--black); padding: 24px 48px;
@@ -716,6 +749,12 @@ body {
     margin-bottom: 28px;
   }
 
+  .provider-signature {
+    width: 100%;
+    max-width: 280px;
+    margin-left: 0;
+  }
+
   .invoice-footer {
     padding-top: 18px;
     padding-bottom: 18px;
@@ -841,6 +880,10 @@ body {
 
   .payment-section {
     padding: 18px 20px;
+    margin-bottom: 28px;
+  }
+
+  .provider-signature {
     margin-bottom: 28px;
   }
 

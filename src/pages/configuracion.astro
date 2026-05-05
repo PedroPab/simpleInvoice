@@ -162,7 +162,8 @@ import SectionCard from '../components/editor/SectionCard.astro';
       gap: 14px;
       align-items: center;
     }
-    .logo-preview {
+    .logo-preview,
+    .signature-preview {
       width: 64px;
       height: 64px;
       border-radius: var(--r-md);
@@ -172,11 +173,28 @@ import SectionCard from '../components/editor/SectionCard.astro';
       place-items: center;
       overflow: hidden;
     }
+    .signature-preview {
+      width: 128px;
+      height: 72px;
+      background: #fff;
+    }
     .logo-preview img,
     .logo-preview svg {
       width: 48px;
       height: 48px;
       object-fit: contain;
+    }
+    .signature-preview img {
+      max-width: 112px;
+      max-height: 56px;
+      object-fit: contain;
+    }
+    .signature-placeholder {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--gray-600);
+      text-align: center;
+      padding: 8px;
     }
     .preview-card {
       background: #fff;
@@ -315,6 +333,10 @@ import SectionCard from '../components/editor/SectionCard.astro';
               <input id="provider-cc" type="text" class="mono" />
             </div>
             <div class="field">
+              <label for="provider-rut">RUT (opcional)</label>
+              <input id="provider-rut" type="text" class="mono" />
+            </div>
+            <div class="field">
               <label for="provider-email">Email</label>
               <input id="provider-email" type="email" />
             </div>
@@ -329,6 +351,18 @@ import SectionCard from '../components/editor/SectionCard.astro';
             <div class="field field-full">
               <label for="provider-website">Sitio web</label>
               <input id="provider-website" type="text" />
+            </div>
+            <div class="field field-full">
+              <div class="logo-control">
+                <div class="signature-preview" id="signature-upload-preview">
+                  <span class="signature-placeholder">Sin firma</span>
+                </div>
+                <div class="field">
+                  <label for="provider-signature">Firma PNG</label>
+                  <input id="provider-signature" type="file" accept="image/png" />
+                  <span class="field-hint">Se guarda en este navegador y se imprime al final del documento.</span>
+                </div>
+              </div>
             </div>
           </div>
         </SectionCard>
@@ -525,6 +559,7 @@ import SectionCard from '../components/editor/SectionCard.astro';
         name: document.getElementById('provider-name'),
         title: document.getElementById('provider-title'),
         cc: document.getElementById('provider-cc'),
+        rut: document.getElementById('provider-rut'),
         email: document.getElementById('provider-email'),
         phone: document.getElementById('provider-phone'),
         city: document.getElementById('provider-city'),
@@ -556,11 +591,18 @@ import SectionCard from '../components/editor/SectionCard.astro';
       },
     };
 
+    function signatureMarkup(nextSettings = settings) {
+      const src = nextSettings.provider?.signatureDataUrl;
+      if (!src) return '<span class="signature-placeholder">Sin firma</span>';
+      return `<img src="${escapeHtml(src)}" alt="Firma configurada" />`;
+    }
+
     function populateForm(nextSettings) {
       settings = JSON.parse(JSON.stringify(nextSettings));
       Object.entries(fields.provider).forEach(([key, el]) => el.value = settings.provider[key] || '');
       Object.entries(fields.brand).forEach(([key, el]) => el.value = settings.brand[key] || DEFAULT_SETTINGS.brand[key] || '');
       Object.entries(fields.document).forEach(([key, el]) => el.value = settings.document[key] || '');
+      document.getElementById('signature-upload-preview').innerHTML = signatureMarkup(settings);
       renderPreview();
       renderReview();
     }
@@ -583,6 +625,7 @@ import SectionCard from '../components/editor/SectionCard.astro';
       document.getElementById('preview-detail').innerHTML = [
         p.title,
         `NIT / CC: ${p.cc}`,
+        p.rut ? `RUT: ${p.rut}` : '',
         p.email,
         p.phone,
         p.city,
@@ -606,9 +649,11 @@ import SectionCard from '../components/editor/SectionCard.astro';
       const rows = [
         ['Prestador', p.name],
         ['Identificación', p.cc],
+        ['RUT', p.rut],
         ['Contacto', [p.email, p.phone, p.city].filter(Boolean).join(' · ')],
         ['Banco', [p.bank, p.accountType, p.accountNumber].filter(Boolean).join(' · ')],
         ['Titular', p.accountHolder],
+        ['Firma', p.signatureDataUrl ? 'PNG cargado' : 'Pendiente'],
         ['Documento', [doc.typeLabel, doc.title, doc.subtitle].filter(Boolean).join(' · ')],
         ['Marca', [brand.shortName, brand.tagLine].filter(Boolean).join(' · ')],
       ];
@@ -697,6 +742,24 @@ import SectionCard from '../components/editor/SectionCard.astro';
       const reader = new FileReader();
       reader.onload = ev => {
         settings.brand.logoDataUrl = ev.target.result;
+        renderPreview();
+      };
+      reader.readAsDataURL(file);
+      event.target.value = '';
+    });
+
+    document.getElementById('provider-signature').addEventListener('change', event => {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (file.type !== 'image/png') {
+        alert('Selecciona una firma en formato PNG.');
+        event.target.value = '';
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = ev => {
+        settings.provider.signatureDataUrl = ev.target.result;
+        document.getElementById('signature-upload-preview').innerHTML = signatureMarkup(settings);
         renderPreview();
       };
       reader.readAsDataURL(file);

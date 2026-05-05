@@ -1,0 +1,30 @@
+---
+// No props — fully controlled by client-side JS in index.astro
+---
+
+<div class="discount-module" id="discount-module">
+  <div class="discount-module-header">
+    <label>
+      <input type="checkbox" id="discount-enabled" />
+      Aplicar descuento
+    </label>
+  </div>
+
+  <div class="discount-fields" id="discount-fields">
+    <div class="discount-field discount-desc-field">
+      <label for="discount-desc">Descripción</label>
+      <input type="text" id="discount-desc" placeholder="Ej: Descuento por pronto pago" />
+    </div>
+    <div class="discount-field">
+      <label for="discount-type">Tipo</label>
+      <select id="discount-type">
+        <option value="percentage">Porcentaje (%)</option>
+        <option value="fixed">Monto fijo ($)</option>
+      </select>
+    </div>
+    <div class="discount-field">
+      <label for="discount-value">Valor</label>
+      <input type="number" id="discount-value" min="0" value="0" />
+    </div>
+  </div>
+</div>

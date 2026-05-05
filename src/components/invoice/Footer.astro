@@ -1,0 +1,21 @@
+---
+import Logo from '../Logo.astro';
+import type { Provider } from '../../types/invoice';
+
+interface Props {
+  provider: Provider;
+  documentNumber: string;
+}
+
+const { provider: prov, documentNumber } = Astro.props;
+---
+
+<div class="invoice-footer">
+  <div class="invoice-footer-brand">
+    <Logo size="sm" />
+    <span class="invoice-footer-text" id="footer-contact">
+      {prov.website} · {prov.email} · {prov.phone}
+    </span>
+  </div>
+  <span class="invoice-footer-code" id="footer-doc">{documentNumber}</span>
+</div>

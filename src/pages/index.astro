@@ -1,0 +1,272 @@
+---
+import '../styles/design-system.css';
+import AppNav from '../components/AppNav.astro';
+---
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inicio — Cuenta de Cobro</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+
+  <style>
+    body { padding: 32px 24px 72px; }
+    .page { max-width: 1120px; margin: 0 auto; }
+
+    .home-hero {
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(280px, .92fr);
+      gap: 36px;
+      align-items: center;
+      min-height: calc(100vh - 170px);
+      padding-bottom: 34px;
+    }
+
+    .eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1.8px;
+      text-transform: uppercase;
+      color: var(--emerald);
+      margin-bottom: 14px;
+      font-weight: 700;
+    }
+
+    .home-title {
+      font-family: var(--font-heading);
+      font-size: clamp(2.8rem, 8vw, 6.4rem);
+      line-height: .92;
+      color: var(--black);
+      max-width: 8.5ch;
+    }
+
+    .home-copy {
+      margin-top: 22px;
+      max-width: 58ch;
+      color: var(--text-secondary);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-top: 30px;
+    }
+
+    .home-panel {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      background: var(--black);
+      color: #fff;
+      padding: 26px;
+    }
+
+    .panel-title {
+      font-family: var(--font-heading);
+      color: var(--gold);
+      font-size: 1.5rem;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .panel-copy {
+      color: rgba(255,255,255,.62);
+      font-size: 14px;
+    }
+
+    .flow-list {
+      display: grid;
+      gap: 0;
+    }
+
+    .flow-step {
+      display: grid;
+      grid-template-columns: 42px minmax(0, 1fr);
+      gap: 14px;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .flow-step:last-child { border-bottom: none; }
+
+    .step-number {
+      width: 34px;
+      height: 34px;
+      border-radius: var(--r-full);
+      display: grid;
+      place-items: center;
+      background: var(--gold-subtle);
+      color: var(--gold-dark);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .step-title {
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 3px;
+    }
+
+    .step-copy {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .quick-links {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 10px;
+    }
+
+    .quick-link {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      padding: 18px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow-sm);
+      transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+
+    .quick-link:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+      box-shadow: var(--shadow-md);
+    }
+
+    .quick-link strong {
+      display: block;
+      font-family: var(--font-heading);
+      font-size: 1.1rem;
+      margin-bottom: 6px;
+    }
+
+    .quick-link span {
+      color: var(--text-secondary);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 880px) {
+      body { padding: 24px 16px 56px; }
+      .home-hero {
+        grid-template-columns: 1fr;
+        min-height: 0;
+        padding-bottom: 24px;
+      }
+      .home-title { max-width: 10ch; }
+      .quick-links { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .hero-actions > * {
+        width: 100%;
+        justify-content: center;
+      }
+      .flow-step {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <AppNav current="inicio" />
+
+    <main>
+      <section class="home-hero" aria-labelledby="home-title">
+        <div>
+          <p class="eyebrow">App local para cuentas de cobro</p>
+          <h1 id="home-title" class="home-title">Cuenta de Cobro</h1>
+          <p class="home-copy">
+            Configura tus datos una sola vez, crea cuentas para cada cliente,
+            revisa el documento final y conserva un histórico local en tu navegador.
+          </p>
+          <div class="hero-actions">
+            <a href="/configuracion" class="btn btn-primary btn-lg">Iniciar configuración</a>
+            <a href="/editor" class="btn btn-dark btn-lg">Crear cuenta</a>
+            <a href="/cuenta" class="btn btn-ghost btn-lg">Ver cuenta</a>
+          </div>
+        </div>
+
+        <aside class="home-panel" aria-label="Flujo de uso">
+          <div class="panel-head">
+            <h2 class="panel-title">Empieza en orden</h2>
+            <p class="panel-copy">Un recorrido corto para dejar la app lista y generar el primer documento.</p>
+          </div>
+          <div class="flow-list">
+            <div class="flow-step">
+              <span class="step-number">01</span>
+              <div>
+                <p class="step-title">Configura tus datos</p>
+                <p class="step-copy">Nombre, identificación, contacto y datos bancarios del prestador.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="step-number">02</span>
+              <div>
+                <p class="step-title">Crea la cuenta</p>
+                <p class="step-copy">Agrega cliente, fechas, servicios, descuentos y retenciones.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="step-number">03</span>
+              <div>
+                <p class="step-title">Revisa y exporta</p>
+                <p class="step-copy">Abre la vista final para imprimir, descargar PDF o guardar Markdown.</p>
+              </div>
+            </div>
+            <div class="flow-step">
+              <span class="step-number">04</span>
+              <div>
+                <p class="step-title">Consulta el histórico</p>
+                <p class="step-copy">Busca cuentas guardadas, duplica documentos anteriores o edítalos.</p>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="quick-links" aria-label="Accesos rápidos">
+        <a class="quick-link" href="/configuracion">
+          <strong>Configuración</strong>
+          <span>Actualiza datos personales, medios de pago y marca visual.</span>
+        </a>
+        <a class="quick-link" href="/editor">
+          <strong>Nueva cuenta</strong>
+          <span>Completa el documento variable para un cliente o servicio.</span>
+        </a>
+        <a class="quick-link" href="/historico">
+          <strong>Histórico</strong>
+          <span>Encuentra documentos guardados en la base local del navegador.</span>
+        </a>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    import { applySettingsToPage, getSettings } from '../scripts/app-settings.js';
+    import { registerPwa } from '../scripts/invoice-store.js';
+
+    applySettingsToPage(getSettings());
+    registerPwa();
+  </script>
+</body>
+</html>

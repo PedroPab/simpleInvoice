@@ -1,0 +1,24 @@
+{
+  "name": "Cuenta de Cobro",
+  "short_name": "Cuenta Cobro",
+  "description": "Historial local de cuentas de cobro por cliente.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FAFAF8",
+  "theme_color": "#0F0F0F",
+  "lang": "es-CO",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "48x48",
+      "type": "image/x-icon"
+    }
+  ]
+}

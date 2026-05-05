@@ -1,0 +1,56 @@
+---
+import type { Provider } from "../../types/invoice";
+
+interface Props {
+  provider: Provider;
+}
+
+const { provider: prov } = Astro.props;
+---
+
+<div class="payment-section">
+  <p class="payment-section-title">
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2.2"
+      stroke-linecap="round"
+    >
+      <rect x="1" y="4" width="22" height="16" rx="2"></rect>
+      <line x1="1" y1="10" x2="23" y2="10"></line>
+    </svg>
+    Información de pago
+  </p>
+
+  <div class="payment-field">
+    <span class="payment-field-label">Banco</span>
+    <span class="payment-field-value" id="pay-bank">{prov.bank}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">Tipo de cuenta</span>
+    <span class="payment-field-value" id="pay-account-type">{prov.accountType}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">N.° de cuenta</span>
+    <span class="payment-field-value" id="pay-account-number">{prov.accountNumber}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">Titular</span>
+    <span class="payment-field-value" id="pay-account-holder">{prov.accountHolder}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">CC / NIT</span>
+    <span class="payment-field-value" id="pay-cc">{prov.cc}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">Nequi </span>
+    <span class="payment-field-value" id="pay-nequi">{prov.nequi}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">Breve </span>
+    <span class="payment-field-value" id="pay-breve">{prov.breve}</span>
+  </div>
+</div>

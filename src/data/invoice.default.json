@@ -1,0 +1,50 @@
+{
+  "documentNumber": "CC-2026-001",
+  "status": "pending",
+  "issuedAt": "",
+  "servicePeriod": "Mayo 2026",
+  "dueDate": "2026-05-15",
+  "client": {
+    "name": "Empresa Cliente S.A.S.",
+    "nit": "900.123.456-7",
+    "contact": "María García",
+    "email": "pagos@empresa.co",
+    "address": "Calle 72 #10-34, Of. 502",
+    "city": "Medellín, Colombia"
+  },
+  "items": [
+    {
+      "name": "Desarrollo de aplicación web",
+      "description": "Frontend React + backend Node.js, diseño UI/UX y despliegue en producción",
+      "quantity": 1,
+      "unit": "proyecto",
+      "unitPrice": 4500000
+    },
+    {
+      "name": "Automatización de procesos",
+      "description": "Integración n8n con CRM, flujos de notificaciones y reportes automáticos",
+      "quantity": 1,
+      "unit": "proyecto",
+      "unitPrice": 1800000
+    },
+    {
+      "name": "Soporte técnico mensual",
+      "description": "Monitoreo, corrección de bugs y actualizaciones de dependencias",
+      "quantity": 4,
+      "unit": "hrs",
+      "unitPrice": 175000
+    }
+  ],
+  "discount": {
+    "enabled": false,
+    "type": "percentage",
+    "value": 0,
+    "description": ""
+  },
+  "retention": {
+    "enabled": true,
+    "rate": 10,
+    "label": "Retención en la fuente"
+  },
+  "notes": "Este documento sirve como soporte de cobro por servicios prestados. Por favor enviar comprobante de pago al correo configurado una vez realizada la transferencia. El valor no incluye IVA según el régimen tributario aplicable."
+}

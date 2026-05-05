@@ -1,0 +1,63 @@
+---
+// No props — values are filled in by client-side JS in editor.astro
+---
+
+<div class="totals-preview">
+  <p class="tp-title">Resumen de totales</p>
+
+  <div class="tp-row">
+    <span class="tp-label">Subtotal</span>
+    <span class="tp-value" id="tp-subtotal">$ 0</span>
+  </div>
+
+  <div class="tp-row" id="tp-disc-row" style="display:none">
+    <span class="tp-label" id="tp-disc-label">Descuento</span>
+    <span class="tp-value" id="tp-disc-value" style="color:var(--gray-600)">− $ 0</span>
+  </div>
+
+  <div class="tp-row" id="tp-ret-row" style="display:none">
+    <span class="tp-label" id="tp-ret-label">Retención</span>
+    <span class="tp-value" id="tp-ret-value" style="color:var(--gray-600)">− $ 0</span>
+  </div>
+
+  <div class="tp-row grand">
+    <span class="tp-label">Total a pagar</span>
+    <span class="tp-value" id="tp-total">$ 0</span>
+  </div>
+</div>
+
+<style>
+  .totals-preview {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 20px; margin-top: 16px;
+  }
+  .tp-title {
+    font-family: var(--font-body);
+    font-size: 10px; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--gray-600); margin-bottom: 14px;
+  }
+  .tp-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 7px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px;
+  }
+  .tp-row:last-child { border-bottom: none; }
+  .tp-label { font-family: var(--font-body); color: var(--text-secondary); }
+  .tp-value { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--text); }
+
+  .tp-row.grand {
+    background: var(--black); border-radius: var(--r-md);
+    padding: 12px 14px; margin-top: 8px; border-bottom: none;
+  }
+  .tp-row.grand .tp-label {
+    font-family: var(--font-body);
+    font-weight: 600; font-size: 0.85rem; color: rgba(255,255,255,.65);
+  }
+  .tp-row.grand .tp-value {
+    font-family: var(--font-body);
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--gold);
+  }
+</style>

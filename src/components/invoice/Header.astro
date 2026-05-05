@@ -1,0 +1,30 @@
+---
+import Logo from '../Logo.astro';
+
+interface Props {
+  documentNumber: string;
+  statusLabel: string;
+  statusClass: 'badge-paid' | 'badge-pending';
+}
+
+const { documentNumber, statusLabel, statusClass } = Astro.props;
+---
+
+<div class="invoice-header">
+  <div>
+    <p class="invoice-type-label" data-document-type>Documento de cobro</p>
+    <h1 class="invoice-title" data-document-title>Cuenta<br />de Cobro</h1>
+    <p class="invoice-subtitle" data-document-subtitle>Servicios de desarrollo de software</p>
+  </div>
+
+  <div class="invoice-header-right">
+    <Logo size="lg" />
+    <div>
+      <p class="invoice-number-label">N.° Documento</p>
+      <p class="invoice-number-value" id="inv-doc-number">{documentNumber}</p>
+    </div>
+    <span class={`badge badge-dot ${statusClass}`} id="inv-status">
+      {statusLabel}
+    </span>
+  </div>
+</div>

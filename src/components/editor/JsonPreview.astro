@@ -1,0 +1,60 @@
+---
+// No props — content is managed by client-side JS in editor.astro
+---
+
+<div class="preview-card">
+  <div class="preview-header">
+    <span class="preview-title">invoice.json</span>
+    <button class="preview-copy-btn" id="btn-copy">Copiar</button>
+  </div>
+  <div class="preview-body">
+    <pre id="json-preview"></pre>
+  </div>
+  <div class="preview-actions">
+    <button class="btn btn-primary btn-sm" style="width:100%;justify-content:center;" id="btn-save-preview">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+        <polyline points="17 21 17 13 7 13 7 21"/>
+        <polyline points="7 3 7 8 15 8"/>
+      </svg>
+      Guardar y Ver Factura
+    </button>
+  </div>
+</div>
+
+<style>
+  .preview-card {
+    background: var(--black);
+    border-radius: var(--r-lg);
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+  }
+  .preview-header {
+    padding: 14px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .preview-title {
+    font-family: var(--font-mono);
+    font-size: 11px; color: var(--emerald); letter-spacing: 1px;
+  }
+  .preview-copy-btn {
+    font-family: var(--font-body); font-size: 11px;
+    background: rgba(255,255,255,.08); border: none; border-radius: var(--r-md);
+    color: rgba(255,255,255,.5); padding: 4px 10px; cursor: pointer;
+    transition: all .15s;
+  }
+  .preview-copy-btn:hover { background: rgba(255,255,255,.15); color: #fff; }
+  .preview-body { padding: 20px; max-height: 520px; overflow-y: auto; }
+  .preview-body::-webkit-scrollbar { width: 4px; }
+  .preview-body::-webkit-scrollbar-thumb { background: rgba(255,255,255,.15); border-radius: 2px; }
+  #json-preview {
+    font-family: var(--font-mono);
+    font-size: 11px; line-height: 1.7;
+    color: rgba(255,255,255,.75); white-space: pre; margin: 0;
+  }
+  .preview-actions {
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,.08);
+  }
+</style>

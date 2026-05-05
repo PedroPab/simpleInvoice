@@ -1,0 +1,450 @@
+---
+import { PROVIDER } from '../config/provider';
+import defaultInvoice from '../data/invoice.default.json';
+import '../styles/design-system.css';
+import { fmtDate, calcTotals } from '../utils/format';
+
+// ── Components ─────────────────────────────────────────────────
+import AppNav        from '../components/AppNav.astro';
+import InvoiceHeader from '../components/invoice/Header.astro';
+import Parties       from '../components/invoice/Parties.astro';
+import MetaDates     from '../components/invoice/MetaDates.astro';
+import ItemsTable    from '../components/invoice/ItemsTable.astro';
+import Totals        from '../components/invoice/Totals.astro';
+import PaymentInfo   from '../components/invoice/PaymentInfo.astro';
+import Notes         from '../components/invoice/Notes.astro';
+import InvoiceFooter from '../components/invoice/Footer.astro';
+
+// ── Server-side data + calculations ───────────────────────────
+const inv = defaultInvoice;
+const { subtotal, retentionAmt, total } = calcTotals(inv);
+
+const statusLabel = inv.status === 'paid' ? 'Pagado' : 'Pendiente de pago';
+const statusClass = inv.status === 'paid' ? 'badge-paid' : 'badge-pending';
+const issuedLabel = fmtDate(inv.issuedAt);
+const dueLabel    = inv.dueDate ? fmtDate(inv.dueDate) : '—';
+
+// Serialise for client-side hydration
+const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
+---
+
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cuenta de Cobro</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+
+  <style>
+    /* ── Page shell (screen-only, not part of invoice) ── */
+    body { padding: 40px 24px 80px; }
+    .page { max-width: 780px; margin: 0 auto; }
+
+    .document-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .upload-hint { text-align: center; font-size: 12px; color: var(--gray-600); margin-top: 16px; }
+    .upload-hint a { color: var(--emerald); text-decoration: none; font-weight: 500; }
+    .upload-hint a:hover { text-decoration: underline; }
+
+    @media (max-width: 720px) {
+      body { padding: 20px 14px 48px; }
+      .document-actions { width: 100%; }
+      .document-actions > * {
+        flex: 1 1 calc(50% - 8px);
+        justify-content: center;
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .document-actions > * { flex-basis: 100%; }
+    }
+
+    /* ── Print ── */
+    @media print {
+      body { background: #fff; padding: 0; }
+      .app-nav, .document-actions, .upload-hint { display: none !important; }
+      .page { max-width: 100%; }
+      .invoice { border-radius: 0; box-shadow: none; border: none; }
+      .items-table tbody tr:hover { background: transparent; }
+    }
+    @page { size: A4; margin: 16mm 12mm; }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <AppNav current="cuenta" />
+
+    <div class="document-actions" aria-label="Acciones de la cuenta">
+        <a href="/editor" class="btn btn-ghost btn-sm" id="btn-edit-current">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+          </svg>
+          Editar
+        </a>
+        <label class="btn btn-ghost btn-sm" style="cursor:pointer;">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+          Cargar JSON
+          <input type="file" id="json-upload" accept=".json" style="display:none;" />
+        </label>
+        <button class="btn btn-ghost btn-sm" onclick="window.print()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <polyline points="6 9 6 2 18 2 18 9"/>
+            <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+            <rect x="6" y="14" width="12" height="8"/>
+          </svg>
+          Imprimir
+        </button>
+        <button class="btn btn-primary btn-sm" onclick="window.print()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Descargar PDF
+        </button>
+        <button class="btn btn-dark btn-sm" id="btn-md">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+            <polyline points="14 2 14 8 20 8"/>
+            <line x1="16" y1="13" x2="8" y2="13"/>
+            <line x1="16" y1="17" x2="8" y2="17"/>
+            <polyline points="10 9 9 9 8 9"/>
+          </svg>
+          Descargar .md
+        </button>
+    </div>
+
+    <!-- INVOICE CARD -->
+    <div class="invoice" id="invoice-root">
+
+      <InvoiceHeader
+        documentNumber={inv.documentNumber}
+        statusLabel={statusLabel}
+        statusClass={statusClass}
+      />
+
+      <div class="invoice-body">
+        <Parties provider={PROVIDER} client={inv.client} />
+
+        <div class="invoice-divider"></div>
+
+        <MetaDates
+          issuedLabel={issuedLabel}
+          servicePeriod={inv.servicePeriod}
+          dueLabel={dueLabel}
+        />
+
+        <ItemsTable items={inv.items} />
+
+        <Totals
+          subtotal={subtotal}
+          retentionAmt={retentionAmt}
+          total={total}
+          retention={inv.retention}
+        />
+
+        <PaymentInfo provider={PROVIDER} />
+
+        <Notes notes={inv.notes} />
+      </div>
+
+      <InvoiceFooter provider={PROVIDER} documentNumber={inv.documentNumber} />
+
+    </div>
+    <!-- /invoice -->
+
+    <p class="upload-hint">
+      ¿Quieres generar una nueva cuenta de cobro?
+      <a href="/editor">Crea una nueva</a>, revisa el <a href="/historico">histórico</a> o carga un JSON.
+    </p>
+
+  </div>
+  <!-- /page -->
+
+  <!-- ══════════════════════════════════════════════════════════
+       CLIENT-SIDE LOGIC
+       Reads state from localStorage (set by editor) or default
+       data, then re-renders the invoice DOM when data changes.
+       ══════════════════════════════════════════════════════════ -->
+  <script type="application/json" id="default-data" set:html={defaultData}></script>
+
+  <script>
+    import {
+      applySettingsToPage,
+      getProviderFromSettings,
+      getSettings,
+      escapeHtml,
+    } from '../scripts/app-settings.js';
+    import {
+      getActiveInvoiceRecord,
+      getInvoiceRecord,
+      migrateLegacyInvoice,
+      registerPwa,
+      saveInvoice,
+    } from '../scripts/invoice-store.js';
+
+    // ── State ─────────────────────────────────────────────────
+    let state = JSON.parse(document.getElementById('default-data').textContent);
+    let currentRecord = null;
+
+    // ── Helpers ───────────────────────────────────────────────
+    function fmt(n) {
+      return '$ ' + Math.round(n).toLocaleString('es-CO');
+    }
+    function fmtDate(iso) {
+      if (!iso) return new Date().toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' });
+      return new Date(iso + 'T00:00:00').toLocaleDateString('es-CO', { day:'numeric', month:'long', year:'numeric' });
+    }
+    function calcTotals(inv) {
+      const subtotal = inv.items.reduce((s, it) => s + it.quantity * it.unitPrice, 0);
+      const disc = inv.discount || {};
+      let discountAmt = 0;
+      if (disc.enabled) {
+        discountAmt = disc.type === 'percentage'
+          ? subtotal * ((disc.value || 0) / 100)
+          : (disc.value || 0);
+      }
+      const net = subtotal - discountAmt;
+      const retentionAmt = inv.retention.enabled ? net * (inv.retention.rate / 100) : 0;
+      return { subtotal, discountAmt, retentionAmt, total: net - retentionAmt };
+    }
+
+    // ── Update totals in DOM ───────────────────────────────────
+    function updateTotals() {
+      const inv = state.invoice;
+      const disc = inv.discount || {};
+      const { subtotal, discountAmt, retentionAmt, total } = calcTotals(inv);
+
+      document.getElementById('tot-subtotal').textContent = fmt(subtotal);
+
+      // Discount as a table footer row
+      const tableDiscRow = document.getElementById('table-disc-row');
+      if (disc.enabled && discountAmt > 0) {
+        tableDiscRow.style.display = '';
+        const typeStr = disc.type === 'percentage'
+          ? `${disc.value}% del subtotal`
+          : `monto fijo`;
+        document.getElementById('table-disc-label').textContent =
+          disc.description
+            ? `Descuento — ${disc.description} (${typeStr})`
+            : `Descuento — ${typeStr}`;
+        document.getElementById('table-disc-value').textContent = '− ' + fmt(discountAmt);
+      } else {
+        tableDiscRow.style.display = 'none';
+      }
+
+      const retRow = document.getElementById('retention-row');
+      if (inv.retention.enabled) {
+        retRow.style.display = '';
+        document.getElementById('retention-label').textContent =
+          `${inv.retention.label} (${inv.retention.rate}%)`;
+        document.getElementById('tot-retention').textContent = '− ' + fmt(retentionAmt);
+      } else {
+        retRow.style.display = 'none';
+      }
+
+      document.getElementById('tot-total').textContent = fmt(total);
+    }
+
+    // ── Full render from state ─────────────────────────────────
+    function render() {
+      const inv = state.invoice;
+      const prov = state.provider;
+      const settings = getSettings();
+      applySettingsToPage(settings);
+
+      // Header
+      document.getElementById('inv-doc-number').textContent = inv.documentNumber;
+      document.getElementById('footer-doc').textContent = inv.documentNumber;
+      const statusEl = document.getElementById('inv-status');
+      statusEl.textContent = inv.status === 'paid' ? 'Pagado' : 'Pendiente de pago';
+      statusEl.className = 'badge badge-dot ' + (inv.status === 'paid' ? 'badge-paid' : 'badge-pending');
+
+      // Parties
+      document.getElementById('prov-name').textContent = prov.name;
+      document.getElementById('prov-detail').innerHTML =
+        `${escapeHtml(prov.title)}<br>` +
+        `NIT / CC: <span class="mono-val">${escapeHtml(prov.cc)}</span><br>` +
+        `<a href="mailto:${escapeHtml(prov.email)}">${escapeHtml(prov.email)}</a><br>` +
+        `<span class="mono-val">${escapeHtml(prov.phone)}</span><br>${escapeHtml(prov.city)}`;
+
+      document.getElementById('client-name').textContent = inv.client.name;
+      document.getElementById('client-detail').innerHTML =
+        `NIT: <span class="mono-val">${inv.client.nit}</span><br>Contacto: ${inv.client.contact}<br>` +
+        `<a href="mailto:${inv.client.email}">${inv.client.email}</a><br>` +
+        `${inv.client.address}<br>${inv.client.city}`;
+
+      // Dates
+      document.getElementById('inv-issued').textContent = fmtDate(inv.issuedAt);
+      document.getElementById('inv-period').textContent = inv.servicePeriod;
+      document.getElementById('inv-due').textContent = inv.dueDate ? fmtDate(inv.dueDate) : '—';
+
+      // Items
+      document.getElementById('items-body').innerHTML = inv.items.map(item => `
+        <tr>
+          <td>
+            <p class="item-name">${item.name}</p>
+            ${item.description ? `<p class="item-desc">${item.description}</p>` : ''}
+          </td>
+          <td>${item.quantity}${item.unit && item.unit !== 'proyecto' ? ' ' + item.unit : ''}</td>
+          <td>${fmt(item.unitPrice)}</td>
+          <td>${fmt(item.quantity * item.unitPrice)}</td>
+        </tr>
+      `).join('');
+
+      // Notes
+      document.getElementById('inv-notes-text').textContent = inv.notes;
+
+      // Payment
+      document.getElementById('pay-bank').textContent = prov.bank;
+      document.getElementById('pay-account-type').textContent = prov.accountType;
+      document.getElementById('pay-account-number').textContent = prov.accountNumber;
+      document.getElementById('pay-account-holder').textContent = prov.accountHolder;
+      document.getElementById('pay-cc').textContent = prov.cc;
+      document.getElementById('pay-nequi').textContent = prov.nequi;
+      document.getElementById('pay-breve').textContent = prov.breve;
+
+      // Footer
+      document.getElementById('footer-contact').textContent =
+        `${prov.website} · ${prov.email} · ${prov.phone}`;
+
+      updateTotals();
+
+      const editLink = document.getElementById('btn-edit-current');
+      if (editLink && currentRecord?.id) {
+        editLink.href = `/editor?id=${encodeURIComponent(currentRecord.id)}`;
+      }
+    }
+
+    // ── JSON upload ───────────────────────────────────────────
+    document.getElementById('json-upload').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = async function(ev) {
+        try {
+          const parsed = JSON.parse(ev.target.result);
+          currentRecord = await saveInvoice(parsed);
+          state.invoice = currentRecord.invoice;
+          render();
+        } catch {
+          alert('El archivo JSON no es válido o el número de documento ya existe.');
+        }
+      };
+      reader.readAsText(file);
+      e.target.value = '';
+    });
+
+    // ── Markdown export ───────────────────────────────────────
+    document.getElementById('btn-md').addEventListener('click', function() {
+      const inv = state.invoice;
+      const prov = state.provider;
+      const settings = getSettings();
+      const disc = inv.discount || {};
+      const { subtotal, discountAmt, retentionAmt, total } = calcTotals(inv);
+
+      const itemsTable = [
+        '| Descripción | Cant. | Valor Unitario | Total |',
+        '|---|---|---|---|',
+        ...inv.items.map(it => {
+          const qty = it.quantity + (it.unit && it.unit !== 'proyecto' ? ' ' + it.unit : '');
+          return `| ${it.name} | ${qty} | ${fmt(it.unitPrice)} | ${fmt(it.quantity * it.unitPrice)} |`;
+        })
+      ].join('\n');
+
+      let totalsLines = `- Subtotal: ${fmt(subtotal)}\n`;
+      if (disc.enabled && discountAmt > 0) {
+        const dLabel = disc.description || (disc.type === 'percentage' ? disc.value + '%' : 'monto fijo');
+        totalsLines += `- Descuento (${dLabel}): − ${fmt(discountAmt)}\n`;
+      }
+      if (inv.retention.enabled) {
+        totalsLines += `- ${inv.retention.label} (${inv.retention.rate}%): − ${fmt(retentionAmt)}\n`;
+      }
+      totalsLines += `- **Total a pagar: ${fmt(total)}**`;
+
+      const md = [
+        `# Cuenta de Cobro — ${inv.documentNumber}`,
+        '',
+        `**Estado:** ${inv.status === 'paid' ? 'Pagado' : 'Pendiente de pago'}`,
+        `**Fecha de emisión:** ${fmtDate(inv.issuedAt)}`,
+        `**Período de servicio:** ${inv.servicePeriod}`,
+        `**Fecha límite de pago:** ${inv.dueDate ? fmtDate(inv.dueDate) : '—'}`,
+        '', '---', '',
+        '## Prestador', '',
+        `- **Nombre:** ${prov.name}`,
+        `- **CC / NIT:** ${prov.cc}`,
+        `- **Email:** ${prov.email}`,
+        `- **Teléfono:** ${prov.phone}`,
+        `- **Ciudad:** ${prov.city}`,
+        '',
+        '## Cliente', '',
+        `- **Empresa:** ${inv.client.name}`,
+        `- **NIT:** ${inv.client.nit}`,
+        `- **Contacto:** ${inv.client.contact}`,
+        `- **Email:** ${inv.client.email}`,
+        `- **Dirección:** ${inv.client.address}, ${inv.client.city}`,
+        '', '---', '',
+        '## Servicios', '',
+        itemsTable,
+        '', '---', '',
+        '## Totales', '',
+        totalsLines,
+        '', '---', '',
+        '## Datos de Pago', '',
+        `- **Banco:** ${prov.bank} — ${prov.accountType}`,
+        `- **N.° Cuenta:** ${prov.accountNumber}`,
+        `- **Titular:** ${prov.accountHolder}`,
+        `- **CC / NIT:** ${prov.cc}`,
+        `- **Nequi / Daviplata:** ${prov.nequi}`,
+        '', '---', '',
+        '## Notas', '',
+        inv.notes,
+        '', '---', '',
+        `*Generado por ${settings.brand.shortName} ${settings.brand.tagLine} · ${prov.email}*`,
+      ].join('\n');
+
+      const blob = new Blob([md], { type: 'text/markdown' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `cuenta-cobro-${inv.documentNumber}.md`;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // ── Init ──────────────────────────────────────────────────
+    async function init() {
+      registerPwa();
+      state.provider = getProviderFromSettings();
+      await migrateLegacyInvoice(state.invoice);
+
+      const id = new URLSearchParams(window.location.search).get('id');
+      currentRecord = id ? await getInvoiceRecord(id) : await getActiveInvoiceRecord();
+
+      if (currentRecord) {
+        state.invoice = currentRecord.invoice;
+      }
+
+      render();
+    }
+
+    init();
+  </script>
+</body>
+</html>

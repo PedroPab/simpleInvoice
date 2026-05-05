@@ -1,0 +1,44 @@
+---
+import type { InvoiceItem } from '../../types/invoice';
+import { fmt } from '../../utils/format';
+
+interface Props {
+  items: InvoiceItem[];
+}
+
+const { items } = Astro.props;
+---
+
+<div class="items-table-wrap">
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th style="width:46%">Descripción del servicio</th>
+        <th style="width:12%">Cant.</th>
+        <th style="width:18%">Valor unitario</th>
+        <th style="width:24%">Total</th>
+      </tr>
+    </thead>
+    <tbody id="items-body">
+      {items.map(item => (
+        <tr>
+          <td data-label="Descripción del servicio">
+            <p class="item-name">{item.name}</p>
+            {item.description && <p class="item-desc">{item.description}</p>}
+          </td>
+          <td data-label="Cant.">
+            {item.quantity}{item.unit && item.unit !== 'proyecto' ? ` ${item.unit}` : ''}
+          </td>
+          <td data-label="Valor unitario">{fmt(item.unitPrice)}</td>
+          <td data-label="Total">{fmt(item.quantity * item.unitPrice)}</td>
+        </tr>
+      ))}
+    </tbody>
+    <tfoot>
+      <tr id="table-disc-row" style="display:none">
+        <td colspan="3" class="tfoot-disc-label" id="table-disc-label">Descuento</td>
+        <td class="tfoot-disc-value" id="table-disc-value">− $ 0</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>

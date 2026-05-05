@@ -1,0 +1,109 @@
+---
+import Logo from './Logo.astro';
+
+type NavKey = 'inicio' | 'cuenta' | 'editor' | 'historico' | 'configuracion';
+
+interface Props {
+  current?: NavKey;
+  suffix?: string;
+}
+
+const { current = 'inicio', suffix = '' } = Astro.props;
+
+const links: Array<{ key: NavKey; href: string; label: string; primary?: boolean }> = [
+  { key: 'inicio', href: '/', label: 'Inicio' },
+  { key: 'editor', href: '/editor', label: 'Nueva cuenta', primary: current === 'inicio' },
+  { key: 'cuenta', href: '/cuenta', label: 'Ver cuenta' },
+  { key: 'historico', href: '/historico', label: 'Histórico' },
+  { key: 'configuracion', href: '/configuracion', label: 'Configuración' },
+];
+---
+
+<header class="app-nav" aria-label="Navegación principal">
+  <a class="app-nav-logo" href="/" aria-label="Ir al inicio">
+    <Logo size="md" />
+    <span class="logo-wordmark">
+      <span class="logo-wordmark-name" data-brand-short>Cuenta</span>
+      <span class="logo-wordmark-tag" data-brand-tag data-brand-suffix={suffix}>Cobro{suffix ? ` · ${suffix}` : ''}</span>
+    </span>
+  </a>
+
+  <nav class="app-nav-actions" aria-label="Secciones">
+    {links.map((link) => (
+      <a
+        href={link.href}
+        class:list={['btn', 'btn-sm', link.primary ? 'btn-primary' : 'btn-ghost', current === link.key && 'is-active']}
+        aria-current={current === link.key ? 'page' : undefined}
+      >
+        {link.label}
+      </a>
+    ))}
+  </nav>
+</header>
+
+<style>
+  .app-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 36px;
+    flex-wrap: wrap;
+    gap: 14px;
+  }
+
+  .app-nav-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;
+    min-width: 0;
+  }
+
+  .app-nav-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+  }
+
+  .app-nav-actions .is-active {
+    border-color: var(--gold);
+    color: var(--gold-dark);
+    background: var(--gold-subtle);
+  }
+
+  @media (max-width: 760px) {
+    .app-nav {
+      margin-bottom: 26px;
+    }
+
+    .app-nav-logo {
+      width: 100%;
+    }
+
+    .app-nav-actions {
+      width: 100%;
+      justify-content: stretch;
+    }
+
+    .app-nav-actions > * {
+      flex: 1 1 calc(50% - 8px);
+      justify-content: center;
+      min-width: 0;
+    }
+  }
+
+  @media (max-width: 440px) {
+    .app-nav-actions > * {
+      flex-basis: 100%;
+    }
+  }
+
+  @media print {
+    .app-nav {
+      display: none !important;
+    }
+  }
+</style>

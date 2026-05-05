@@ -1,0 +1,40 @@
+---
+import type { InvoiceRetention } from '../../types/invoice';
+import { fmt } from '../../utils/format';
+
+interface Props {
+  subtotal: number;
+  retentionAmt: number;
+  total: number;
+  retention: InvoiceRetention;
+}
+
+const { subtotal, retentionAmt, total, retention } = Astro.props;
+---
+
+<div class="totals">
+  <div class="total-row">
+    <span class="total-label">Subtotal</span>
+    <span class="total-value" id="tot-subtotal">{fmt(subtotal)}</span>
+  </div>
+
+  <!-- Retention row (shown if retention.enabled) -->
+  <div
+    class="total-row"
+    id="retention-row"
+    style={retention.enabled ? '' : 'display:none'}
+  >
+    <span class="total-label" id="retention-label">
+      {retention.label} ({retention.rate}%)
+    </span>
+    <span class="total-value negative" id="tot-retention">
+      − {fmt(retentionAmt)}
+    </span>
+  </div>
+
+  <!-- Grand total -->
+  <div class="total-row-grand">
+    <span class="total-grand-label">Total a pagar</span>
+    <span class="total-grand-value" id="tot-total">{fmt(total)}</span>
+  </div>
+</div>

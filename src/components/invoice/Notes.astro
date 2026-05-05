@@ -1,0 +1,12 @@
+---
+interface Props {
+  notes: string;
+}
+
+const { notes } = Astro.props;
+---
+
+<div class="invoice-notes">
+  <strong>Notas</strong>
+  <span id="inv-notes-text">{notes}</span>
+</div>

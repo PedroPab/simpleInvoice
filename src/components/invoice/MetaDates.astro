@@ -1,0 +1,26 @@
+---
+interface Props {
+  issuedLabel: string;
+  servicePeriod: string;
+  dueLabel: string;
+}
+
+const { issuedLabel, servicePeriod, dueLabel } = Astro.props;
+---
+
+<div class="invoice-meta-row">
+  <div class="meta-item">
+    <span class="meta-label">Fecha de emisión</span>
+    <span class="meta-value" id="inv-issued">{issuedLabel}</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Período de servicio</span>
+    <span class="meta-value" id="inv-period">{servicePeriod}</span>
+  </div>
+  <div class="meta-item">
+    <span class="meta-label">Fecha límite de pago</span>
+    <span class="meta-value" id="inv-due" style="color: var(--gold-dark); font-weight: 700;">
+      {dueLabel}
+    </span>
+  </div>
+</div>

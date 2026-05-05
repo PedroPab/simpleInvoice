@@ -1,0 +1,43 @@
+---
+interface Props {
+  /** sm = 28×28 (footer), md = 32×32 (topbar), lg = 52×52 (invoice header) */
+  size?: 'sm' | 'md' | 'lg';
+}
+
+const sizes = { sm: 28, md: 32, lg: 52 };
+const textSize = { sm: [20, 22, 9, 21], md: [23, 25, 11, 24], lg: [38, 41, 17, 40] };
+// [letterFontSize, letterY, arrowFontSize, arrowY]
+
+const { size = 'md' } = Astro.props;
+const dim = sizes[size];
+const rx = size === 'lg' ? 10 : size === 'md' ? 7 : 6;
+const [pFs, pY, aFs, aY] = textSize[size];
+const pX = size === 'lg' ? 6 : size === 'md' ? 3.5 : 3;
+const aX = size === 'lg' ? 32 : size === 'md' ? 20 : 17;
+---
+
+<span class="logo-slot" data-logo-slot data-logo-size={size}>
+  <svg
+    class="logo-mark"
+    width={dim}
+    height={dim}
+    viewBox={`0 0 ${dim} ${dim}`}
+    aria-hidden="true"
+  >
+    <rect width={dim} height={dim} rx={rx} fill="var(--gold)" />
+    <text
+      x={pX} y={pY}
+      font-family="Georgia,serif"
+      font-size={pFs}
+      font-weight="700"
+      fill="var(--black)"
+    >C</text>
+    <text
+      x={aX} y={aY}
+      font-family="var(--font-mono)"
+      font-size={aFs}
+      font-weight="700"
+      fill="var(--emerald)"
+    >&gt;</text>
+  </svg>
+</span>

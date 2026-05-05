@@ -40,12 +40,12 @@
     text-transform: uppercase; color: var(--gray-600); margin-bottom: 14px;
   }
   .tp-row {
-    display: flex; justify-content: space-between; align-items: center;
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 14px; align-items: center;
     padding: 7px 0; border-bottom: 1px solid var(--gray-100); font-size: 13px;
   }
   .tp-row:last-child { border-bottom: none; }
   .tp-label { font-family: var(--font-body); color: var(--text-secondary); }
-  .tp-value { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--text); }
+  .tp-value { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--text); text-align: right; }
 
   .tp-row.grand {
     background: var(--black); border-radius: var(--r-md);

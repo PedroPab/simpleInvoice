@@ -16,19 +16,19 @@ const defaultData = JSON.stringify(defaultInvoice);
   <link rel="manifest" href="/manifest.webmanifest" />
 
   <style is:global>
-    body { padding: 32px 24px 80px; }
-    .page { max-width: 1080px; margin: 0 auto; }
+    body { padding: var(--page-pad) var(--page-pad) clamp(56px, 8vw, 80px); }
+    .page { max-width: 1080px; margin: 0 auto; width: 100%; }
 
     .history-hero {
       background: var(--black);
       border-radius: var(--r-xl);
       box-shadow: var(--shadow-lg);
-      padding: 34px 38px;
-      margin-bottom: 24px;
+      padding: clamp(24px, 4vw, 34px) clamp(20px, 5vw, 38px);
+      margin-bottom: var(--content-gap);
       color: #fff;
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(260px, 360px);
-      gap: 28px;
+      gap: var(--content-gap);
       align-items: end;
     }
     .eyebrow {
@@ -150,10 +150,25 @@ const defaultData = JSON.stringify(defaultInvoice);
     }
 
     @media (max-width: 760px) {
-      body { padding: 20px 14px 60px; }
-      .history-hero { grid-template-columns: 1fr; padding: 28px 22px; }
+      .history-hero { grid-template-columns: 1fr; }
       .invoice-row { grid-template-columns: 1fr; }
-      .invoice-actions { justify-content: flex-start; }
+      .invoice-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        justify-content: stretch;
+      }
+      .invoice-actions > * { justify-content: center; }
+    }
+
+    @media (max-width: 440px) {
+      .client-heading {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .invoice-actions {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>

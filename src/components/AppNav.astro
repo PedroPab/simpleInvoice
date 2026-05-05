@@ -46,9 +46,9 @@ const links: Array<{ key: NavKey; href: string; label: string; primary?: boolean
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 36px;
+    margin-bottom: clamp(24px, 4vw, 36px);
     flex-wrap: wrap;
-    gap: 14px;
+    gap: 14px 18px;
   }
 
   .app-nav-logo {
@@ -66,6 +66,7 @@ const links: Array<{ key: NavKey; href: string; label: string; primary?: boolean
     flex-wrap: wrap;
     align-items: center;
     justify-content: flex-end;
+    min-width: 0;
   }
 
   .app-nav-actions .is-active {
@@ -86,18 +87,19 @@ const links: Array<{ key: NavKey; href: string; label: string; primary?: boolean
     .app-nav-actions {
       width: 100%;
       justify-content: stretch;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
     .app-nav-actions > * {
-      flex: 1 1 calc(50% - 8px);
       justify-content: center;
       min-width: 0;
     }
   }
 
   @media (max-width: 440px) {
-    .app-nav-actions > * {
-      flex-basis: 100%;
+    .app-nav-actions {
+      grid-template-columns: 1fr;
     }
   }
 

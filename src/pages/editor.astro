@@ -20,8 +20,8 @@ const defaultData = JSON.stringify({ invoice: defaultInvoice, provider: PROVIDER
   <link rel="manifest" href="/manifest.webmanifest" />
 
   <style>
-    body { padding: 32px 24px 80px; }
-    .page { max-width: 1160px; margin: 0 auto; }
+    body { padding: var(--page-pad) var(--page-pad) clamp(56px, 8vw, 80px); }
+    .page { max-width: 1160px; margin: 0 auto; width: 100%; }
 
     .editor-actions {
       display: flex;
@@ -29,19 +29,19 @@ const defaultData = JSON.stringify({ invoice: defaultInvoice, provider: PROVIDER
       flex-wrap: wrap;
       align-items: center;
       justify-content: flex-end;
-      margin-bottom: 24px;
+      margin-bottom: var(--content-gap);
     }
 
     /* ── TWO-COLUMN LAYOUT ── */
     .editor-layout {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) 340px;
-      gap: 32px;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 340px);
+      gap: var(--section-gap);
       align-items: start;
     }
 
     /* ── FORM PANEL ── */
-    .form-panel { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+    .form-panel { display: flex; flex-direction: column; gap: var(--content-gap); min-width: 0; }
 
     /* ── PREVIEW PANEL ── */
     .preview-panel {
@@ -78,11 +78,18 @@ const defaultData = JSON.stringify({ invoice: defaultInvoice, provider: PROVIDER
     }
 
     @media (max-width: 640px) {
-      body { padding: 20px 16px 60px; }
-      .editor-actions > * {
-        flex: 1 1 calc(50% - 8px);
-        justify-content: center;
+      .editor-actions {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
+      .editor-actions > * {
+        justify-content: center;
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .editor-actions { grid-template-columns: 1fr; }
     }
   </style>
 </head>

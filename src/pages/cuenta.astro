@@ -39,8 +39,8 @@ const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
 
   <style>
     /* ── Page shell (screen-only, not part of invoice) ── */
-    body { padding: 40px 24px 80px; }
-    .page { max-width: 780px; margin: 0 auto; }
+    body { padding: var(--page-pad) var(--page-pad) clamp(56px, 8vw, 80px); }
+    .page { max-width: 780px; margin: 0 auto; width: 100%; }
 
     .document-actions {
       display: flex;
@@ -56,17 +56,19 @@ const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
     .upload-hint a:hover { text-decoration: underline; }
 
     @media (max-width: 720px) {
-      body { padding: 20px 14px 48px; }
-      .document-actions { width: 100%; }
+      .document-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
       .document-actions > * {
-        flex: 1 1 calc(50% - 8px);
         justify-content: center;
         min-width: 0;
       }
     }
 
     @media (max-width: 460px) {
-      .document-actions > * { flex-basis: 100%; }
+      .document-actions { grid-template-columns: 1fr; }
     }
 
     /* ── Print ── */
@@ -306,13 +308,13 @@ const defaultData = JSON.stringify({ invoice: inv, provider: PROVIDER });
       // Items
       document.getElementById('items-body').innerHTML = inv.items.map(item => `
         <tr>
-          <td>
+          <td data-label="Descripción del servicio">
             <p class="item-name">${item.name}</p>
             ${item.description ? `<p class="item-desc">${item.description}</p>` : ''}
           </td>
-          <td>${item.quantity}${item.unit && item.unit !== 'proyecto' ? ' ' + item.unit : ''}</td>
-          <td>${fmt(item.unitPrice)}</td>
-          <td>${fmt(item.quantity * item.unitPrice)}</td>
+          <td data-label="Cant.">${item.quantity}${item.unit && item.unit !== 'proyecto' ? ' ' + item.unit : ''}</td>
+          <td data-label="Valor unitario">${fmt(item.unitPrice)}</td>
+          <td data-label="Total">${fmt(item.quantity * item.unitPrice)}</td>
         </tr>
       `).join('');
 

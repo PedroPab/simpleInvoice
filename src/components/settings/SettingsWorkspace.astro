@@ -1,0 +1,132 @@
+---
+import Logo from '../Logo.astro';
+import SectionCard from '../editor/SectionCard.astro';
+---
+
+<div class="settings-layout">
+  <div class="form-panel">
+    <div class="validation-note" id="validation-note"></div>
+
+    <section class="wizard-panel is-active" data-step="0" aria-label="Paso 1: identidad">
+      <div class="step-help">Estos datos identifican a la persona o empresa que emite la cuenta de cobro.</div>
+      <SectionCard title="Identidad" badge="const">
+        <div class="field-grid">
+          <div class="field"><label for="provider-name">Nombre</label><input id="provider-name" type="text" /></div>
+          <div class="field"><label for="provider-title">Profesión / título</label><input id="provider-title" type="text" /></div>
+          <div class="field"><label for="provider-cc">CC / NIT</label><input id="provider-cc" type="text" class="mono" /></div>
+          <div class="field"><label for="provider-rut">RUT (opcional)</label><input id="provider-rut" type="text" class="mono" /></div>
+          <div class="field"><label for="provider-email">Email</label><input id="provider-email" type="email" /></div>
+          <div class="field"><label for="provider-phone">Teléfono</label><input id="provider-phone" type="text" class="mono" /></div>
+          <div class="field"><label for="provider-city">Ciudad</label><input id="provider-city" type="text" /></div>
+          <div class="field field-full"><label for="provider-website">Sitio web</label><input id="provider-website" type="text" /></div>
+          <div class="field field-full">
+            <div class="logo-control">
+              <div class="signature-preview" id="signature-upload-preview"><span class="signature-placeholder">Sin firma</span></div>
+              <div class="field">
+                <label for="provider-signature">Firma PNG</label>
+                <input id="provider-signature" type="file" accept="image/png" />
+                <span class="field-hint">Se guarda en este navegador y se imprime al final del documento.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </SectionCard>
+    </section>
+
+    <section class="wizard-panel" data-step="1" aria-label="Paso 2: datos de pago">
+      <div class="step-help">Agrega la cuenta bancaria y los medios alternativos que quieres mostrar al cliente.</div>
+      <SectionCard title="Datos de pago" badge="const">
+        <div class="field-grid">
+          <div class="field"><label for="provider-bank">Banco</label><input id="provider-bank" type="text" /></div>
+          <div class="field"><label for="provider-account-type">Tipo de cuenta</label><input id="provider-account-type" type="text" /></div>
+          <div class="field"><label for="provider-account-number">N.° cuenta</label><input id="provider-account-number" type="text" class="mono" /></div>
+          <div class="field"><label for="provider-account-holder">Titular</label><input id="provider-account-holder" type="text" /></div>
+          <div class="field"><label for="provider-nequi">Nequi / Daviplata</label><input id="provider-nequi" type="text" class="mono" /></div>
+          <div class="field"><label for="provider-breve">Breve</label><input id="provider-breve" type="text" /></div>
+        </div>
+      </SectionCard>
+    </section>
+
+    <section class="wizard-panel" data-step="2" aria-label="Paso 3: textos del documento">
+      <div class="step-help">Define los textos fijos que aparecerán en el encabezado de cada documento.</div>
+      <SectionCard title="Textos constantes" badge="const">
+        <div class="field-grid">
+          <div class="field"><label for="doc-type">Tipo de documento</label><input id="doc-type" type="text" /></div>
+          <div class="field"><label for="doc-title">Título principal</label><input id="doc-title" type="text" /></div>
+          <div class="field field-full"><label for="doc-subtitle">Subtítulo</label><input id="doc-subtitle" type="text" /></div>
+        </div>
+      </SectionCard>
+    </section>
+
+    <section class="wizard-panel" data-step="3" aria-label="Paso 4: marca visual">
+      <div class="step-help">Personaliza la apariencia. Puedes dejar los valores por defecto y ajustarlos después.</div>
+      <SectionCard title="Marca visual" badge="dyn">
+        <div class="logo-control">
+          <div class="logo-preview" id="logo-upload-preview"><Logo size="lg" /></div>
+          <div class="field">
+            <label for="brand-logo">Logo</label>
+            <input id="brand-logo" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" />
+            <span class="field-hint">Se guarda en este navegador. PNG, JPG, WEBP o SVG.</span>
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field"><label for="brand-short">Nombre corto</label><input id="brand-short" type="text" /></div>
+          <div class="field"><label for="brand-tag">Etiqueta</label><input id="brand-tag" type="text" /></div>
+        </div>
+        <div class="color-grid">
+          <div class="field"><label for="brand-primary">Color principal</label><input id="brand-primary" type="color" /></div>
+          <div class="field"><label for="brand-primary-dark">Color principal oscuro</label><input id="brand-primary-dark" type="color" /></div>
+          <div class="field"><label for="brand-accent">Color acento</label><input id="brand-accent" type="color" /></div>
+          <div class="field"><label for="brand-dark">Color oscuro</label><input id="brand-dark" type="color" /></div>
+          <div class="field"><label for="brand-bg">Fondo</label><input id="brand-bg" type="color" /></div>
+          <div class="field"><label for="brand-text">Texto</label><input id="brand-text" type="color" /></div>
+        </div>
+        <div class="field-grid col3">
+          <div class="field"><label for="font-heading">Tipografía títulos</label><input id="font-heading" type="text" placeholder="Syne" /></div>
+          <div class="field"><label for="font-body">Tipografía texto</label><input id="font-body" type="text" placeholder="DM Sans" /></div>
+          <div class="field"><label for="font-mono">Tipografía datos</label><input id="font-mono" type="text" placeholder="JetBrains Mono" /></div>
+        </div>
+      </SectionCard>
+    </section>
+
+    <section class="wizard-panel" data-step="4" aria-label="Paso 5: revisión final">
+      <div class="step-help">Revisa los datos principales antes de guardar. La configuración se guarda solo en este navegador.</div>
+      <SectionCard title="Revisión final" badge="dyn">
+        <div class="review-list" id="settings-review"></div>
+      </SectionCard>
+    </section>
+
+    <div class="wizard-controls" aria-label="Controles del asistente">
+      <button class="btn btn-ghost btn-md" id="wizard-prev" type="button">Anterior</button>
+      <button class="btn btn-primary btn-md" id="wizard-next" type="button">Siguiente</button>
+    </div>
+  </div>
+
+  <aside class="preview-panel">
+    <div class="preview-card">
+      <div class="brand-strip">
+        <div>
+          <p class="invoice-type-label" data-document-type>Documento de cobro</p>
+          <h1 class="brand-preview-title" data-document-title>Cuenta<br />de Cobro</h1>
+          <p class="brand-preview-subtitle" data-document-subtitle>Servicios de desarrollo de software</p>
+        </div>
+        <Logo size="lg" />
+      </div>
+      <div class="preview-body">
+        <div>
+          <p class="party-label">De (prestador)</p>
+          <p class="preview-name" id="preview-name"></p>
+          <p class="preview-detail" id="preview-detail"></p>
+        </div>
+        <div class="preview-payment" id="preview-payment"></div>
+      </div>
+    </div>
+    <div class="actions-card">
+      <button class="btn btn-primary btn-md" id="btn-save-settings" style="justify-content:center;">Guardar configuración</button>
+      <button class="btn btn-ghost btn-md" id="btn-export-settings" style="justify-content:center;">Exportar configuración</button>
+      <label class="btn btn-ghost btn-md" for="settings-import" style="justify-content:center;cursor:pointer;">Importar configuración</label>
+      <input id="settings-import" type="file" accept=".json,application/json" style="display:none;" />
+      <button class="btn btn-ghost btn-md danger-btn" id="btn-reset-settings" style="justify-content:center;">Resetear configuración</button>
+    </div>
+  </aside>
+</div>

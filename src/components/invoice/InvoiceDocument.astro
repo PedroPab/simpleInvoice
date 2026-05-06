@@ -1,0 +1,76 @@
+---
+import type { Provider, Invoice } from '../../types/invoice';
+import InvoiceHeader from './Header.astro';
+import Parties from './Parties.astro';
+import MetaDates from './MetaDates.astro';
+import ItemsTable from './ItemsTable.astro';
+import Totals from './Totals.astro';
+import PaymentInfo from './PaymentInfo.astro';
+import Notes from './Notes.astro';
+import InvoiceFooter from './Footer.astro';
+
+interface Props {
+  provider: Provider;
+  invoice: Invoice;
+  issuedLabel: string;
+  dueLabel: string;
+  statusLabel: string;
+  statusClass: 'badge-paid' | 'badge-pending';
+  subtotal: number;
+  retentionAmt: number;
+  total: number;
+}
+
+const {
+  provider,
+  invoice,
+  issuedLabel,
+  dueLabel,
+  statusLabel,
+  statusClass,
+  subtotal,
+  retentionAmt,
+  total,
+} = Astro.props;
+---
+
+<div class="invoice" id="invoice-root">
+  <InvoiceHeader
+    documentNumber={invoice.documentNumber}
+    statusLabel={statusLabel}
+    statusClass={statusClass}
+  />
+
+  <div class="invoice-body">
+    <Parties provider={provider} client={invoice.client} />
+
+    <div class="invoice-divider"></div>
+
+    <MetaDates
+      issuedLabel={issuedLabel}
+      servicePeriod={invoice.servicePeriod}
+      dueLabel={dueLabel}
+    />
+
+    <ItemsTable items={invoice.items} />
+
+    <Totals
+      subtotal={subtotal}
+      retentionAmt={retentionAmt}
+      total={total}
+      retention={invoice.retention}
+    />
+
+    <PaymentInfo provider={provider} />
+    <Notes notes={invoice.notes} />
+
+    <div class="provider-signature" id="provider-signature-block" style={provider.signatureDataUrl ? '' : 'display:none;'}>
+      <img id="provider-signature-img" src={provider.signatureDataUrl} alt={`Firma de ${provider.name}`} />
+      <div class="provider-signature-line"></div>
+      <p class="provider-signature-name" id="provider-signature-name">{provider.name}</p>
+      <p class="provider-signature-id" id="provider-signature-id">CC / NIT: {provider.cc}</p>
+    </div>
+  </div>
+
+  <InvoiceFooter provider={provider} documentNumber={invoice.documentNumber} />
+</div>

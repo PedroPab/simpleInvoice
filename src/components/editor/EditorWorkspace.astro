@@ -1,0 +1,156 @@
+---
+import SectionCard from './SectionCard.astro';
+import JsonPreview from './JsonPreview.astro';
+import TotalsPreview from './TotalsPreview.astro';
+---
+
+<div class="editor-layout">
+  <div class="form-panel">
+    <SectionCard title="Documento" badge="var">
+      <div class="field-grid col3">
+        <div class="field">
+          <label for="f-doc-number">N.° Documento</label>
+          <input type="text" id="f-doc-number" class="mono" placeholder="CC-2026-001" />
+        </div>
+        <div class="field">
+          <label for="f-status">Estado</label>
+          <select id="f-status">
+            <option value="pending">Pendiente de pago</option>
+            <option value="paid">Pagado</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-issued">Fecha de emisión</label>
+          <input type="date" id="f-issued" class="mono" />
+          <span class="field-hint">Vacío = hoy automáticamente</span>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="f-period">Período de servicio</label>
+          <input type="text" id="f-period" class="mono" placeholder="Mayo 2026" />
+        </div>
+        <div class="field">
+          <label for="f-due">Fecha límite de pago</label>
+          <input type="date" id="f-due" class="mono" />
+        </div>
+      </div>
+    </SectionCard>
+
+    <SectionCard title="Prestador (tú)" badge="const">
+      <p class="field-hint">
+        Datos constantes guardados en este navegador.
+        <a href="/configuracion" style="color:var(--emerald);font-weight:600;text-decoration:none;">Editar configuración</a>
+      </p>
+      <div class="field-grid">
+        <div class="field">
+          <label>Nombre</label>
+          <input type="text" id="prov-name-disp" readonly />
+        </div>
+        <div class="field">
+          <label>CC / NIT</label>
+          <input type="text" id="prov-cc-disp" class="mono" readonly />
+        </div>
+        <div class="field">
+          <label>Email</label>
+          <input type="text" id="prov-email-disp" readonly />
+        </div>
+        <div class="field">
+          <label>Teléfono</label>
+          <input type="text" id="prov-phone-disp" class="mono" readonly />
+        </div>
+      </div>
+    </SectionCard>
+
+    <SectionCard title="Cliente" badge="var">
+      <div class="field-grid">
+        <div class="field">
+          <label for="f-client-name">Nombre / Empresa</label>
+          <input type="text" id="f-client-name" placeholder="Empresa Cliente S.A.S." />
+        </div>
+        <div class="field">
+          <label for="f-client-nit">NIT</label>
+          <input type="text" id="f-client-nit" class="mono" placeholder="900.123.456-7" />
+        </div>
+        <div class="field">
+          <label for="f-client-contact">Contacto</label>
+          <input type="text" id="f-client-contact" placeholder="Nombre del contacto" />
+        </div>
+        <div class="field">
+          <label for="f-client-email">Email</label>
+          <input type="email" id="f-client-email" placeholder="pagos@empresa.co" />
+        </div>
+        <div class="field field-full">
+          <label for="f-client-address">Dirección</label>
+          <input type="text" id="f-client-address" placeholder="Calle 72 #10-34, Of. 502" />
+        </div>
+        <div class="field field-full">
+          <label for="f-client-city">Ciudad</label>
+          <input type="text" id="f-client-city" placeholder="Medellín, Colombia" />
+        </div>
+      </div>
+    </SectionCard>
+
+    <SectionCard title="Servicios / Ítems" badge="var">
+      <div id="items-list" class="items-list"></div>
+      <button class="add-item-btn" id="add-item-btn">+ Agregar ítem</button>
+    </SectionCard>
+
+    <SectionCard title="Descuento" badge="var">
+      <div class="toggle-row">
+        <label>
+          <input type="checkbox" id="f-disc-enabled" />
+          Aplicar descuento
+        </label>
+      </div>
+      <div class="sub-fields field-grid col3" id="disc-sub-fields">
+        <div class="field">
+          <label for="f-disc-type">Tipo</label>
+          <select id="f-disc-type">
+            <option value="percentage">Porcentaje (%)</option>
+            <option value="fixed">Monto fijo ($)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-disc-value">Valor</label>
+          <input type="number" id="f-disc-value" class="mono" min="0" value="0" />
+        </div>
+        <div class="field">
+          <label for="f-disc-desc">Descripción</label>
+          <input type="text" id="f-disc-desc" placeholder="Ej: Pronto pago" />
+        </div>
+      </div>
+    </SectionCard>
+
+    <SectionCard title="Retención en la fuente" badge="var">
+      <div class="toggle-row">
+        <label>
+          <input type="checkbox" id="f-ret-enabled" />
+          Aplicar retención
+        </label>
+      </div>
+      <div class="sub-fields field-grid" id="ret-sub-fields">
+        <div class="field">
+          <label for="f-ret-label">Etiqueta</label>
+          <input type="text" id="f-ret-label" placeholder="Retención en la fuente" />
+        </div>
+        <div class="field">
+          <label for="f-ret-rate">Porcentaje (%)</label>
+          <input type="number" id="f-ret-rate" class="mono" min="0" max="100" value="10" />
+        </div>
+      </div>
+    </SectionCard>
+
+    <SectionCard title="Notas" badge="var">
+      <div class="field">
+        <label for="f-notes">Texto de notas</label>
+        <textarea id="f-notes" rows="4" placeholder="Instrucciones de pago, términos, etc."></textarea>
+      </div>
+    </SectionCard>
+  </div>
+
+  <div class="preview-panel">
+    <JsonPreview />
+    <TotalsPreview />
+  </div>
+</div>

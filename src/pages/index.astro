@@ -5,16 +5,17 @@ import QuickLinks from '../components/home/QuickLinks.astro';
 ---
 
 <AppLayout title="Inicio — Cuenta de Cobro" current="inicio">
-  <style slot="head">
+  <style is:global slot="head">
     body { padding: var(--page-pad) var(--page-pad) clamp(48px, 8vw, 72px); }
     .page { max-width: 1120px; margin: 0 auto; width: 100%; }
 
+    /* ── HERO ── */
     .home-hero {
       display: grid;
-      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 420px);
       gap: var(--section-gap);
       align-items: center;
-      min-height: min(680px, calc(100vh - 170px));
+      min-height: min(660px, calc(100vh - 180px));
       padding-bottom: var(--section-gap);
     }
 
@@ -24,21 +25,21 @@ import QuickLinks from '../components/home/QuickLinks.astro';
       letter-spacing: 1.8px;
       text-transform: uppercase;
       color: var(--emerald);
-      margin-bottom: 14px;
+      margin-bottom: 16px;
       font-weight: 700;
     }
 
     .home-title {
       font-family: var(--font-heading);
-      font-size: clamp(2.8rem, 8vw, 6.4rem);
-      line-height: .92;
+      font-size: clamp(3rem, 9vw, 6.5rem);
+      line-height: .9;
       color: var(--black);
-      max-width: 8.5ch;
+      letter-spacing: -3px;
     }
 
     .home-copy {
       margin-top: 22px;
-      max-width: 58ch;
+      max-width: 52ch;
       color: var(--text-secondary);
       font-size: clamp(15px, 2vw, 17px);
       line-height: 1.75;
@@ -49,47 +50,57 @@ import QuickLinks from '../components/home/QuickLinks.astro';
       gap: 10px;
       flex-wrap: wrap;
       align-items: center;
-      margin-top: 30px;
+      margin-top: 32px;
     }
 
+    /* ── PANEL (right side) ── */
     .home-panel {
-      background: #fff;
-      border: 1px solid var(--border);
-      border-radius: var(--r-lg);
+      background: var(--black);
+      border-radius: var(--r-xl);
       box-shadow: var(--shadow-lg);
       overflow: hidden;
+      color: #fff;
     }
 
     .panel-head {
-      background: var(--black);
-      color: #fff;
-      padding: 26px;
+      padding: 28px 28px 22px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .panel-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--emerald);
+      margin-bottom: 10px;
     }
 
     .panel-title {
       font-family: var(--font-heading);
       color: var(--gold);
-      font-size: 1.5rem;
-      line-height: 1.1;
-      margin-bottom: 8px;
+      font-size: 1.9rem;
+      line-height: .95;
+      margin-bottom: 10px;
+      letter-spacing: -1px;
     }
 
     .panel-copy {
-      color: rgba(255,255,255,.62);
-      font-size: 14px;
+      color: rgba(255,255,255,.45);
+      font-size: 13px;
+      line-height: 1.6;
     }
 
-    .flow-list {
-      display: grid;
-      gap: 0;
-    }
+    /* ── FLOW STEPS ── */
+    .flow-list { list-style: none; }
 
     .flow-step {
       display: grid;
-      grid-template-columns: 42px minmax(0, 1fr);
+      grid-template-columns: 40px minmax(0, 1fr);
       gap: 14px;
-      padding: 20px 24px;
-      border-bottom: 1px solid var(--gray-200);
+      padding: 18px 28px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      align-items: start;
     }
 
     .flow-step:last-child { border-bottom: none; }
@@ -100,83 +111,126 @@ import QuickLinks from '../components/home/QuickLinks.astro';
       border-radius: var(--r-full);
       display: grid;
       place-items: center;
-      background: var(--gold-subtle);
-      color: var(--gold-dark);
+      background: rgba(242,183,5,.15);
+      color: var(--gold);
       font-family: var(--font-mono);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 800;
+      flex-shrink: 0;
     }
 
     .step-title {
-      font-weight: 800;
-      color: var(--text);
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
       margin-bottom: 3px;
     }
 
     .step-copy {
-      color: var(--text-secondary);
-      font-size: 14px;
+      color: rgba(255,255,255,.42);
+      font-size: 12px;
       line-height: 1.55;
+    }
+
+    /* ── QUICK LINKS ── */
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gray-600);
+      margin-bottom: 14px;
     }
 
     .quick-links {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
-      margin-top: 4px;
     }
 
     .quick-link {
       background: #fff;
       border: 1px solid var(--border);
-      border-radius: var(--r-md);
-      padding: 18px;
+      border-radius: var(--r-lg);
+      padding: 22px;
       text-decoration: none;
       color: inherit;
       box-shadow: var(--shadow-sm);
       transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
     }
 
+    .quick-link::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+
+    .quick-link--gold::before   { background: var(--gold); }
+    .quick-link--emerald::before { background: var(--emerald); }
+    .quick-link--navy::before   { background: var(--navy); }
+
     .quick-link:hover {
-      transform: translateY(-2px);
-      border-color: var(--gold);
+      transform: translateY(-3px);
       box-shadow: var(--shadow-md);
     }
 
-    .quick-link strong {
-      display: block;
+    .quick-link--gold:hover    { border-color: rgba(242,183,5,.35); }
+    .quick-link--emerald:hover { border-color: rgba(23,160,120,.35); }
+    .quick-link--navy:hover    { border-color: rgba(31,69,88,.35); }
+
+    .ql-title {
       font-family: var(--font-heading);
-      font-size: 1.1rem;
-      margin-bottom: 6px;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.2;
     }
 
-    .quick-link span {
+    .ql-copy {
       color: var(--text-secondary);
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.6;
+      flex: 1;
     }
 
-    @media (max-width: 880px) {
+    .ql-cta {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .5px;
+      margin-top: 6px;
+    }
+
+    .quick-link--gold    .ql-cta { color: var(--gold-dark); }
+    .quick-link--emerald .ql-cta { color: var(--emerald-dark); }
+    .quick-link--navy    .ql-cta { color: var(--navy-dark); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 920px) {
       .home-hero {
         grid-template-columns: 1fr;
         min-height: 0;
         padding-bottom: 24px;
       }
-      .home-title { max-width: 10ch; }
+      .home-title { letter-spacing: -2px; }
+    }
+
+    @media (max-width: 640px) {
       .quick-links { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
-    @media (max-width: 520px) {
+    @media (max-width: 480px) {
       .quick-links { grid-template-columns: 1fr; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions > * { width: 100%; justify-content: center; }
       .panel-head { padding: 22px; }
-      .hero-actions > * {
-        width: 100%;
-        justify-content: center;
-      }
-      .flow-step {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
+      .flow-step { padding: 16px 22px; gap: 10px; }
     }
   </style>
 
@@ -184,10 +238,10 @@ import QuickLinks from '../components/home/QuickLinks.astro';
     <HomeHero />
     <QuickLinks />
   </main>
-
-  <script slot="scripts">
-    import { initStaticPage } from '../scripts/page-lifecycle.js';
-
-    initStaticPage();
-  </script>
 </AppLayout>
+
+<script>
+  import { initStaticPage } from '../scripts/page-lifecycle.js';
+
+  initStaticPage();
+</script>

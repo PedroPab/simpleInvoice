@@ -3,26 +3,36 @@ const links = [
   {
     href: '/configuracion',
     title: 'Configuración',
-    copy: 'Actualiza datos personales, medios de pago y marca visual.',
+    copy: 'Actualiza tus datos de prestador, cuenta bancaria y marca visual.',
+    cta: 'Editar ajustes →',
+    mod: 'gold',
   },
   {
     href: '/editor',
     title: 'Nueva cuenta',
-    copy: 'Completa el documento variable para un cliente o servicio.',
+    copy: 'Completa el formulario de cobro para un cliente nuevo o existente.',
+    cta: 'Crear documento →',
+    mod: 'emerald',
   },
   {
     href: '/historico',
     title: 'Histórico',
-    copy: 'Encuentra documentos guardados en la base local del navegador.',
+    copy: 'Encuentra documentos guardados localmente, duplícalos o edítalos.',
+    cta: 'Ver histórico →',
+    mod: 'navy',
   },
 ];
 ---
 
-<section class="quick-links" aria-label="Accesos rápidos">
-  {links.map((link) => (
-    <a class="quick-link" href={link.href}>
-      <strong>{link.title}</strong>
-      <span>{link.copy}</span>
-    </a>
-  ))}
+<section aria-label="Accesos rápidos">
+  <p class="section-eyebrow">Accesos rápidos</p>
+  <div class="quick-links">
+    {links.map((link) => (
+      <a class={`quick-link quick-link--${link.mod}`} href={link.href}>
+        <p class="ql-title">{link.title}</p>
+        <p class="ql-copy">{link.copy}</p>
+        <span class="ql-cta">{link.cta}</span>
+      </a>
+    ))}
+  </div>
 </section>

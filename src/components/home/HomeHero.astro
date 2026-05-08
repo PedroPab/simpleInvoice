@@ -3,56 +3,57 @@ const steps = [
   {
     number: '01',
     title: 'Configura tus datos',
-    copy: 'Nombre, identificación, contacto y datos bancarios del prestador.',
+    copy: 'Nombre, CC / NIT, banco y contacto del prestador.',
   },
   {
     number: '02',
-    title: 'Crea la cuenta',
-    copy: 'Agrega cliente, fechas, servicios, descuentos y retenciones.',
+    title: 'Crea la cuenta de cobro',
+    copy: 'Agrega cliente, fechas, ítems y deducciones.',
   },
   {
     number: '03',
     title: 'Revisa y exporta',
-    copy: 'Abre la vista final para imprimir, descargar PDF o guardar Markdown.',
+    copy: 'Imprime en A4, descarga PDF o guarda el JSON.',
   },
   {
     number: '04',
     title: 'Consulta el histórico',
-    copy: 'Busca cuentas guardadas, duplica documentos anteriores o edítalos.',
+    copy: 'Busca, duplica o edita documentos anteriores.',
   },
 ];
 ---
 
 <section class="home-hero" aria-labelledby="home-title">
-  <div>
-    <p class="eyebrow">App local para cuentas de cobro</p>
-    <h1 id="home-title" class="home-title">Cuenta de Cobro</h1>
+  <div class="hero-left">
+    <p class="eyebrow">App local · 100&nbsp;% privada · sin servidores</p>
+    <h1 id="home-title" class="home-title">Cuenta<br>de Cobro</h1>
     <p class="home-copy">
-      Configura tus datos una sola vez, crea cuentas para cada cliente,
-      revisa el documento final y conserva un histórico local en tu navegador.
+      Configura tus datos una sola vez, genera documentos de cobro
+      profesionales para cada cliente y conserva un histórico local
+      en tu propio navegador.
     </p>
     <div class="hero-actions">
       <a href="/configuracion" class="btn btn-primary btn-lg">Iniciar configuración</a>
-      <a href="/editor" class="btn btn-dark btn-lg">Crear cuenta</a>
-      <a href="/cuenta" class="btn btn-ghost btn-lg">Ver cuenta</a>
+      <a href="/editor" class="btn btn-dark btn-lg">Nueva cuenta</a>
     </div>
   </div>
 
   <aside class="home-panel" aria-label="Flujo de uso">
     <div class="panel-head">
-      <h2 class="panel-title">Empieza en orden</h2>
-      <p class="panel-copy">Un recorrido corto para dejar la app lista y generar el primer documento.</p>
+      <p class="panel-eyebrow">Flujo de uso</p>
+      <h2 class="panel-title">Empieza<br>en orden</h2>
+      <p class="panel-copy">Cuatro pasos para dejar la app lista y generar el primer documento.</p>
     </div>
-    <div class="flow-list">
+    <ol class="flow-list">
       {steps.map((step) => (
-        <div class="flow-step">
+        <li class="flow-step">
           <span class="step-number">{step.number}</span>
           <div>
             <p class="step-title">{step.title}</p>
             <p class="step-copy">{step.copy}</p>
           </div>
-        </div>
+        </li>
       ))}
-    </div>
+    </ol>
   </aside>
 </section>

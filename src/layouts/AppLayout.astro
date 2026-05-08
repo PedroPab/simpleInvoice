@@ -17,6 +17,8 @@ const {
   suffix = '',
   pageClass = 'page',
 } = Astro.props;
+
+const umamiId = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID;
 ---
 
 <!doctype html>
@@ -27,6 +29,7 @@ const {
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    {umamiId && <script is:inline defer src="https://umami.toxolinko.site/script.js" data-website-id={umamiId} />}
     <slot name="head" />
   </head>
   <body>

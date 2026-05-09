@@ -1610,9 +1610,17 @@ textarea:focus-visible {
   .quote { border-radius: 0; box-shadow: none; border: none; }
   .quote-header,
   .quote-body { padding-left: 0; padding-right: 0; }
-  .quote-cover-meta { padding-left: 0; padding-right: 0; }
+  .quote-cover-meta { padding-left: 0; padding-right: 0; grid-template-columns: repeat(4, 1fr); }
   .quote-header { flex-direction: row; align-items: flex-start; }
   .quote-header-right { align-items: flex-end; }
+  /* Restore multi-column layouts overridden by responsive breakpoints */
+  .q-parties { grid-template-columns: 1fr 1fr; }
+  .q-obj-grid { grid-template-columns: repeat(3, 1fr); }
+  .q-check-list { grid-template-columns: 1fr 1fr; }
+  .q-sign-block { grid-template-columns: 1fr 1fr; gap: 36px; }
+  .q-payment-split { grid-template-columns: repeat(3, 1fr); }
+  .q-phases { grid-template-columns: repeat(5, 1fr); }
+  .q-phases::before { display: block; }
   .q-section { break-inside: avoid; }
   .q-phases, .q-payment-split, .q-sign-block { break-inside: avoid; }
   .q-items-table tbody tr:hover { background: transparent; }

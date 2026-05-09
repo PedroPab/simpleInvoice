@@ -7,6 +7,7 @@ import {
 import {
   getActiveQuoteRecord,
   getQuoteRecord,
+  saveQuote,
 } from '../quote-store.js';
 import { registerPwa } from '../invoice-store.js';
 
@@ -231,6 +232,25 @@ export function initQuotePage() {
     const el = document.getElementById(id);
     if (el) el.innerHTML = html;
   }
+
+  // ── JSON upload ─────────────────────────────────────────────
+  document.getElementById('quote-json-upload')?.addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = async function(ev) {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        currentRecord = await saveQuote(parsed);
+        state.quote = currentRecord.quote;
+        render();
+      } catch {
+        alert('El archivo JSON no es válido o el número de cotización ya existe.');
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = '';
+  });
 
   // ── JSON download ───────────────────────────────────────────
   document.getElementById('btn-download-json')?.addEventListener('click', () => {

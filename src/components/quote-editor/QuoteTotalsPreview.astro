@@ -1,0 +1,40 @@
+---
+// Sticky totals preview for the quote editor right panel
+---
+
+<div class="section-card">
+  <div class="section-header" style="background: var(--black); border-bottom-color: rgba(255,255,255,.1);">
+    <span class="section-title" style="color:#fff;">Totales</span>
+    <span class="section-badge badge-var">en vivo</span>
+  </div>
+  <div class="section-body">
+    <div style="display:flex; flex-direction:column; gap:8px;">
+      <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--text-secondary);">
+        <span>Subtotal</span>
+        <span id="qprev-subtotal" style="font-family:var(--font-mono); font-weight:600; color:var(--text);">$ 0</span>
+      </div>
+      <div id="qprev-disc-row" style="display:none; justify-content:space-between; font-size:13px; color:var(--text-secondary);">
+        <span id="qprev-disc-label">Descuento</span>
+        <span id="qprev-disc-val" style="font-family:var(--font-mono); font-weight:600; color:var(--emerald-dark);">− $ 0</span>
+      </div>
+    </div>
+    <div style="background:var(--black); border-radius:var(--r-md); padding:14px 16px; display:flex; align-items:center; justify-content:space-between; margin-top:4px;">
+      <span style="font-family:var(--font-body); font-size:13px; font-weight:600; color:rgba(255,255,255,.65);">Total</span>
+      <span id="qprev-total" style="font-family:var(--font-heading); font-size:1.35rem; font-weight:800; color:var(--gold);">$ 0</span>
+    </div>
+  </div>
+</div>
+
+<div class="section-card">
+  <div class="section-header">
+    <span class="section-title">Estado guardado</span>
+    <span id="qprev-save-badge" class="section-badge badge-const">sin cambios</span>
+  </div>
+  <div class="section-body">
+    <p style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+      Los cambios se guardan en este navegador.<br/>
+      Pulsa <strong>Guardar</strong> para confirmar.
+    </p>
+    <p id="qprev-doc-num" style="font-family:var(--font-mono); font-size:11px; color:var(--gray-600);">—</p>
+  </div>
+</div>

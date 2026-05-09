@@ -1,0 +1,39 @@
+---
+import type { Quote } from '../../types/quote';
+import { fmtDate } from '../../utils/format';
+
+interface Props {
+  quote: Pick<Quote, 'client' | 'projectName' | 'issuedAt' | 'validDays'>;
+}
+
+const { quote } = Astro.props;
+
+const issuedDate = fmtDate(quote.issuedAt);
+
+function addDays(iso: string, days: number): string {
+  const d = iso ? new Date(iso + 'T00:00:00') : new Date();
+  d.setDate(d.getDate() + days);
+  return d.toLocaleDateString('es-CO', { day: 'numeric', month: 'long', year: 'numeric' });
+}
+
+const validUntil = addDays(quote.issuedAt, quote.validDays);
+---
+
+<div class="quote-cover-meta">
+  <div class="cover-meta-item">
+    <span class="cover-meta-label">Cliente</span>
+    <span class="cover-meta-value" id="q-cover-client">{quote.client.name}</span>
+  </div>
+  <div class="cover-meta-item">
+    <span class="cover-meta-label">Proyecto</span>
+    <span class="cover-meta-value" id="q-cover-project">{quote.projectName}</span>
+  </div>
+  <div class="cover-meta-item">
+    <span class="cover-meta-label">Fecha</span>
+    <span class="cover-meta-value" id="q-cover-issued">{issuedDate}</span>
+  </div>
+  <div class="cover-meta-item">
+    <span class="cover-meta-label">Vigente hasta</span>
+    <span class="cover-meta-value" id="q-cover-valid">{validUntil}</span>
+  </div>
+</div>

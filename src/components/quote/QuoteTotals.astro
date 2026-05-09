@@ -1,0 +1,36 @@
+---
+import type { QuoteDiscount } from '../../types/quote';
+import { fmt } from '../../utils/format';
+
+interface Props {
+  subtotal: number;
+  discountAmt: number;
+  discount: QuoteDiscount;
+  total: number;
+}
+
+const { subtotal, discountAmt, discount, total } = Astro.props;
+---
+
+<div class="totals">
+  <div class="total-row">
+    <span class="total-label">Subtotal</span>
+    <span class="total-value" id="q-tot-subtotal">{fmt(subtotal)}</span>
+  </div>
+
+  <div class="total-row" id="q-discount-row" style={discount.enabled && discountAmt > 0 ? '' : 'display:none;'}>
+    <span class="total-label" id="q-disc-label">
+      {discount.enabled && discount.description
+        ? discount.description
+        : 'Descuento'}
+    </span>
+    <span class="total-value" id="q-tot-discount" style="color: var(--emerald-dark);">
+      {discount.enabled && discountAmt > 0 ? `− ${fmt(discountAmt)}` : ''}
+    </span>
+  </div>
+
+  <div class="total-row-grand">
+    <span class="total-grand-label">Total del proyecto</span>
+    <span class="total-grand-value" id="q-tot-total">{fmt(total)}</span>
+  </div>
+</div>

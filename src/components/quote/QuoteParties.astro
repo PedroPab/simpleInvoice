@@ -1,0 +1,38 @@
+---
+import type { Provider } from '../../types/invoice';
+import type { QuoteClient } from '../../types/quote';
+
+interface Props {
+  provider: Provider;
+  client: QuoteClient;
+}
+
+const { provider, client } = Astro.props;
+---
+
+<div class="q-parties">
+  <div class="q-party-card">
+    <p class="party-label">De · prestador</p>
+    <p class="party-name" id="q-prov-name">{provider.name}</p>
+    <p class="party-role" id="q-prov-role">&gt; {provider.title}</p>
+    <p class="party-detail" id="q-prov-detail">
+      NIT / CC: <span class="mono-val">{provider.cc}</span><br />
+      {provider.rut && <><span class="mono-val">{provider.rut}</span><br /></>}
+      <a href={`mailto:${provider.email}`}>{provider.email}</a><br />
+      <span class="mono-val">{provider.phone}</span><br />
+      {provider.city}
+    </p>
+  </div>
+
+  <div class="q-party-card">
+    <p class="party-label">Para · cliente</p>
+    <p class="party-name" id="q-client-name">{client.name}</p>
+    <p class="party-role" id="q-client-contact">&gt; Contacto: {client.contact}</p>
+    <p class="party-detail" id="q-client-detail">
+      NIT: <span class="mono-val">{client.nit}</span><br />
+      <a href={`mailto:${client.email}`}>{client.email}</a><br />
+      {client.address}<br />
+      {client.city}
+    </p>
+  </div>
+</div>

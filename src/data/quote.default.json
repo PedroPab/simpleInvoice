@@ -1,0 +1,183 @@
+{
+  "documentNumber": "COT-2026-001",
+  "status": "draft",
+  "issuedAt": "",
+  "validDays": 15,
+  "projectName": "Sitio web corporativo",
+  "client": {
+    "name": "Empresa Cliente S.A.S.",
+    "nit": "900.123.456-7",
+    "contact": "María García",
+    "email": "contacto@empresa.co",
+    "address": "Calle 72 #10-34, Of. 502",
+    "city": "Medellín, Colombia"
+  },
+  "summary": "Esta cotización contempla el diseño, desarrollo e implementación de una solución web profesional, rápida y optimizada, enfocada en mejorar la presencia digital, la captación de clientes y la automatización de procesos del negocio.",
+  "objectives": {
+    "problem": "Falta de presencia digital, formularios manuales y baja captación de clientes calificados.",
+    "result": "Sitio web profesional, medible, que convierta visitas en contactos y reduzca trabajo manual.",
+    "delivery": "Sitio publicado, responsivo, con formularios, analíticas, capacitación y soporte inicial."
+  },
+  "scope": [
+    "Consultoría inicial",
+    "Análisis del negocio",
+    "Planeación de estructura web",
+    "Diseño visual adaptado a la marca",
+    "Desarrollo de páginas",
+    "Configuración de formularios",
+    "Optimización móvil (responsive)",
+    "Optimización de velocidad",
+    "Instalación de analíticas",
+    "Capacitación básica",
+    "Soporte posterior a la entrega",
+    "Documentación y manual de uso"
+  ],
+  "items": [
+    {
+      "tag": "Planeación",
+      "name": "Consultoría inicial",
+      "description": "Reunión para entender el negocio, objetivos y requerimientos.",
+      "quantity": 1,
+      "unit": "1",
+      "unitPrice": 250000
+    },
+    {
+      "tag": "Planeación",
+      "name": "Planeación del proyecto",
+      "description": "Definición de estructura, secciones, contenido y flujo del sitio.",
+      "quantity": 1,
+      "unit": "1",
+      "unitPrice": 600000
+    },
+    {
+      "tag": "Diseño",
+      "name": "Diseño visual",
+      "description": "Diseño de interfaz adaptado a la marca, sistema visual y componentes.",
+      "quantity": 1,
+      "unit": "1",
+      "unitPrice": 1400000
+    },
+    {
+      "tag": "Desarrollo",
+      "name": "Página de inicio",
+      "description": "Desarrollo de landing principal con secciones de marca y CTA.",
+      "quantity": 1,
+      "unit": "1",
+      "unitPrice": 1200000
+    },
+    {
+      "tag": "Desarrollo",
+      "name": "Página de servicios",
+      "description": "Sección para mostrar servicios o productos del negocio.",
+      "quantity": 1,
+      "unit": "1",
+      "unitPrice": 800000
+    },
+    {
+      "tag": "Optimización",
+      "name": "Optimización responsive",
+      "description": "Adaptación para celular, tablet y escritorio.",
+      "quantity": 1,
+      "unit": "1",
+      "unitPrice": 500000
+    },
+    {
+      "tag": "Entrega",
+      "name": "Capacitación y soporte",
+      "description": "Explicación de uso y soporte posterior a la entrega (15 días).",
+      "quantity": 1,
+      "unit": "1",
+      "unitPrice": 350000
+    }
+  ],
+  "discount": {
+    "enabled": false,
+    "description": "Descuento por pago anticipado",
+    "amount": 0
+  },
+  "phases": [
+    {
+      "name": "Planeación",
+      "time": "1–2 DÍAS",
+      "bullets": ["Recolección de info", "Definición del alcance", "Estructura del sitio"]
+    },
+    {
+      "name": "Diseño",
+      "time": "2–4 DÍAS",
+      "bullets": ["Propuesta visual", "Ajustes iniciales", "Aprobación"]
+    },
+    {
+      "name": "Desarrollo",
+      "time": "5–10 DÍAS",
+      "bullets": ["Construcción", "Formularios", "Responsive"]
+    },
+    {
+      "name": "Revisión",
+      "time": "2–3 DÍAS",
+      "bullets": ["Pruebas", "Correcciones", "Feedback"]
+    },
+    {
+      "name": "Entrega",
+      "time": "1 DÍA",
+      "bullets": ["Publicación", "Capacitación", "Accesos / docs"]
+    }
+  ],
+  "deliverables": [
+    "Sitio web publicado",
+    "Diseño adaptable a celular",
+    "Formularios funcionando",
+    "Botón de WhatsApp",
+    "Páginas acordadas",
+    "Optimización básica SEO",
+    "Analíticas instaladas",
+    "Manual básico de uso",
+    "Soporte por 15 días",
+    "Accesos de administración"
+  ],
+  "exclusions": [
+    "Compra de dominio",
+    "Compra de hosting",
+    "Redacción profesional avanzada",
+    "Fotografías profesionales",
+    "Licencias de plugins premium",
+    "Cambios fuera del alcance aprobado",
+    "Mantenimiento mensual",
+    "Campañas publicitarias",
+    "Diseño de logo / identidad completa",
+    "Migración de contenido externo"
+  ],
+  "timingRows": [
+    { "phase": "Planeación", "time": "1 a 2 días" },
+    { "phase": "Diseño", "time": "2 a 4 días" },
+    { "phase": "Desarrollo", "time": "5 a 10 días" },
+    { "phase": "Revisión y ajustes", "time": "2 a 3 días" },
+    { "phase": "Entrega final", "time": "1 día" }
+  ],
+  "timingTotal": "11 a 20 días hábiles",
+  "paymentSteps": [
+    {
+      "percentage": 40,
+      "name": "Para iniciar",
+      "description": "Anticipo al firmar la cotización. Bloquea el cupo y arrancan los tiempos."
+    },
+    {
+      "percentage": 30,
+      "name": "Aprobación de diseño",
+      "description": "Una vez se aprueba la propuesta visual y el avance principal."
+    },
+    {
+      "percentage": 30,
+      "name": "Antes de la entrega",
+      "description": "Antes de la publicación y entrega de accesos."
+    }
+  ],
+  "conditions": [
+    "<strong>Vigencia.</strong> La presente cotización tiene vigencia de 15 días calendario desde la fecha de emisión.",
+    "<strong>Inicio de tiempos.</strong> Los tiempos del proyecto empiezan a contar desde que se realiza el pago inicial.",
+    "<strong>Insumos del cliente.</strong> El cliente debe entregar textos, imágenes, accesos y datos necesarios en los plazos acordados.",
+    "<strong>Cambios fuera de alcance.</strong> Cualquier cambio o ítem adicional fuera de lo aprobado se cotiza por separado.",
+    "<strong>Entrega.</strong> El proyecto se considera entregado cuando todos los ítems acordados estén completos y publicados.",
+    "<strong>Confidencialidad.</strong> Toda información del cliente es tratada de forma confidencial; los entregables son de su propiedad una vez cancelado el 100%."
+  ],
+  "notes": ""
+}

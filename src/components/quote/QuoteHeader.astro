@@ -1,0 +1,35 @@
+---
+import Logo from '../Logo.astro';
+import type { Quote } from '../../types/quote';
+
+interface Props {
+  quote: Pick<Quote, 'documentNumber' | 'status' | 'projectName'>;
+}
+
+const { quote } = Astro.props;
+
+const statusMap = {
+  draft:    { label: 'Borrador',  cls: 'badge-quote-draft' },
+  sent:     { label: 'Enviada',   cls: 'badge-quote-sent' },
+  approved: { label: 'Aprobada', cls: 'badge-quote-approved' },
+  rejected: { label: 'Rechazada', cls: 'badge-quote-rejected' },
+};
+const { label: statusLabel, cls: statusClass } = statusMap[quote.status] ?? statusMap.draft;
+---
+
+<div class="quote-header">
+  <div class="quote-header-left">
+    <p class="quote-type-label">Propuesta · Cotización</p>
+    <h1 class="quote-title" id="q-title">Cotización<br />de proyecto</h1>
+    <p class="quote-subtitle" id="q-subtitle">{quote.projectName}</p>
+  </div>
+
+  <div class="quote-header-right">
+    <Logo size="lg" />
+    <div>
+      <p class="quote-number-label">N.° de cotización</p>
+      <p class="quote-number-value" id="q-doc-number">{quote.documentNumber}</p>
+    </div>
+    <span class={`badge badge-dot ${statusClass}`} id="q-status">{statusLabel}</span>
+  </div>
+</div>

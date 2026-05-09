@@ -1,0 +1,58 @@
+---
+import type { Provider } from '../../types/invoice';
+import type { QuotePaymentStep } from '../../types/quote';
+
+interface Props {
+  provider: Provider;
+  paymentSteps: QuotePaymentStep[];
+}
+
+const { provider, paymentSteps } = Astro.props;
+---
+
+<!-- Payment split -->
+<div class="q-payment-split" id="q-payment-steps">
+  {paymentSteps.map((step, i) => (
+    <div class="q-payment-step">
+      <span class="q-payment-step-tag">0{i + 1}</span>
+      <p class="q-payment-step-pct">{step.percentage}%</p>
+      <p class="q-payment-step-name">{step.name}</p>
+      <p class="q-payment-step-desc">{step.description}</p>
+    </div>
+  ))}
+</div>
+
+<!-- Bank transfer data -->
+<div class="payment-section" style="margin-top: 16px; grid-template-columns: repeat(3, minmax(0,1fr));">
+  <p class="payment-section-title">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <rect x="1" y="4" width="22" height="16" rx="2"></rect>
+      <line x1="1" y1="10" x2="23" y2="10"></line>
+    </svg>
+    Datos para transferencia
+  </p>
+  <div class="payment-field">
+    <span class="payment-field-label">Banco</span>
+    <span class="payment-field-value" id="q-pay-bank">{provider.bank}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">Tipo de cuenta</span>
+    <span class="payment-field-value" id="q-pay-type">{provider.accountType}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">N.° de cuenta</span>
+    <span class="payment-field-value" id="q-pay-number">{provider.accountNumber}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">Titular</span>
+    <span class="payment-field-value" id="q-pay-holder">{provider.accountHolder}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">CC / NIT</span>
+    <span class="payment-field-value" id="q-pay-cc">{provider.cc}</span>
+  </div>
+  <div class="payment-field">
+    <span class="payment-field-label">Nequi / Daviplata</span>
+    <span class="payment-field-value" id="q-pay-nequi">{provider.nequi}</span>
+  </div>
+</div>

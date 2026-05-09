@@ -1,7 +1,7 @@
 ---
 import Logo from './Logo.astro';
 
-type NavKey = 'inicio' | 'cuenta' | 'editor' | 'historico' | 'configuracion';
+type NavKey = 'inicio' | 'cuenta' | 'editor' | 'historico' | 'configuracion' | 'cotizacion' | 'cotizaciones' | 'cotizacion-editor';
 
 interface Props {
   current?: NavKey;
@@ -15,6 +15,8 @@ const links: Array<{ key: NavKey; href: string; label: string; primary?: boolean
   { key: 'editor', href: '/editor', label: 'Nueva cuenta', primary: current === 'inicio' },
   { key: 'cuenta', href: '/cuenta', label: 'Ver cuenta' },
   { key: 'historico', href: '/historico', label: 'Histórico' },
+  { key: 'cotizacion', href: '/cotizacion', label: 'Cotización' },
+  { key: 'cotizaciones', href: '/cotizaciones', label: 'Cotizaciones' },
   { key: 'configuracion', href: '/configuracion', label: 'Configuración' },
 ];
 ---

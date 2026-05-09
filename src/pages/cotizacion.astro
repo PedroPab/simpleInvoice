@@ -1,0 +1,97 @@
+---
+import { PROVIDER } from '../config/provider';
+import defaultQuote from '../data/quote.default.json';
+import { fmtDate } from '../utils/format';
+import type { Quote } from '../types/quote';
+import AppLayout from '../layouts/AppLayout.astro';
+import QuoteActions from '../components/quote/QuoteActions.astro';
+import QuoteDocument from '../components/quote/QuoteDocument.astro';
+
+// ── Server-side initial render data ─────────────────────────
+const quote = defaultQuote as Quote;
+
+function calcTotals(q: Quote) {
+  const subtotal = q.items.reduce((s, it) => s + it.quantity * it.unitPrice, 0);
+  const discountAmt = q.discount.enabled ? q.discount.amount : 0;
+  return { subtotal, discountAmt, total: subtotal - discountAmt };
+}
+
+const { subtotal, discountAmt, total } = calcTotals(quote);
+const defaultData = JSON.stringify({ quote, provider: PROVIDER });
+---
+
+<AppLayout title="Cotización" current="cotizacion">
+  <style is:global slot="head">
+    body { padding: var(--page-pad) var(--page-pad) clamp(56px, 8vw, 80px); }
+    .page { max-width: 860px; margin: 0 auto; width: 100%; }
+
+    .document-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .upload-hint {
+      text-align: center;
+      font-size: 12px;
+      color: var(--gray-600);
+      margin-top: 16px;
+    }
+    .upload-hint a {
+      color: var(--emerald);
+      text-decoration: none;
+      font-weight: 500;
+    }
+    .upload-hint a:hover { text-decoration: underline; }
+
+    @media (max-width: 720px) {
+      .document-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .document-actions > * {
+        justify-content: center;
+        min-width: 0;
+      }
+    }
+
+    @media (max-width: 460px) {
+      .document-actions { grid-template-columns: 1fr; }
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .app-nav, .document-actions, .upload-hint { display: none !important; }
+      .page { max-width: 100%; }
+      .quote { border-radius: 0; box-shadow: none; border: none; }
+      .q-items-table tbody tr:hover { background: transparent; }
+    }
+    @page { size: A4; margin: 14mm 10mm; }
+  </style>
+
+  <QuoteActions />
+
+  <QuoteDocument
+    provider={PROVIDER}
+    quote={quote}
+    subtotal={subtotal}
+    discountAmt={discountAmt}
+    total={total}
+  />
+
+  <p class="upload-hint">
+    ¿Necesitas otra cotización? <a href="/cotizaciones">Ver todas las cotizaciones</a>
+    o <a href="/editor">crear una cuenta de cobro</a>.
+  </p>
+
+  <script is:inline slot="scripts" type="application/json" id="default-data" set:html={defaultData}></script>
+</AppLayout>
+
+<script>
+  import { initQuotePage } from '../scripts/pages/quote-page.js';
+  initQuotePage();
+</script>

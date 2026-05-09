@@ -1,0 +1,257 @@
+---
+import type { Provider } from '../../types/invoice';
+import type { Quote } from '../../types/quote';
+import { fmt } from '../../utils/format';
+
+import QuoteHeader from './QuoteHeader.astro';
+import QuoteCoverMeta from './QuoteCoverMeta.astro';
+import QuoteParties from './QuoteParties.astro';
+import QuoteItemsTable from './QuoteItemsTable.astro';
+import QuoteTotals from './QuoteTotals.astro';
+import QuotePayment from './QuotePayment.astro';
+import QuoteFooter from './QuoteFooter.astro';
+
+interface Props {
+  provider: Provider;
+  quote: Quote;
+  subtotal: number;
+  discountAmt: number;
+  total: number;
+}
+
+const { provider, quote, subtotal, discountAmt, total } = Astro.props;
+
+const ICONS = {
+  check: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  x: `<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+};
+---
+
+<div class="quote" id="quote-root">
+
+  <QuoteHeader quote={quote} />
+  <QuoteCoverMeta quote={quote} />
+
+  <div class="quote-body">
+
+    <!-- 01 · Partes -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">01 ·</span>
+        <h2 class="q-section-title">Partes</h2>
+        <span class="q-section-desc">Prestador y cliente</span>
+      </div>
+      <QuoteParties provider={provider} client={quote.client} />
+    </section>
+
+    <!-- 02 · Resumen -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">02 ·</span>
+        <h2 class="q-section-title">Resumen del proyecto</h2>
+      </div>
+      <blockquote class="q-pullquote" id="q-summary-text">{quote.summary}</blockquote>
+    </section>
+
+    <!-- 03 · Objetivos -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">03 ·</span>
+        <h2 class="q-section-title">Objetivo del proyecto</h2>
+      </div>
+      <div class="q-obj-grid" id="q-objectives">
+        <div class="q-obj-card">
+          <span class="q-obj-num">↳ PROBLEMA</span>
+          <p class="q-obj-title">Qué se va a resolver</p>
+          <p class="q-obj-desc" id="q-obj-problem">{quote.objectives.problem}</p>
+        </div>
+        <div class="q-obj-card">
+          <span class="q-obj-num">↳ RESULTADO</span>
+          <p class="q-obj-title">Qué espera el cliente</p>
+          <p class="q-obj-desc" id="q-obj-result">{quote.objectives.result}</p>
+        </div>
+        <div class="q-obj-card">
+          <span class="q-obj-num">↳ ENTREGA</span>
+          <p class="q-obj-title">Qué se entrega al final</p>
+          <p class="q-obj-desc" id="q-obj-delivery">{quote.objectives.delivery}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 · Alcance -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">04 ·</span>
+        <h2 class="q-section-title">Alcance general</h2>
+        <span class="q-section-desc">Todo lo que incluye el proyecto</span>
+      </div>
+      <div class="q-check-list" id="q-scope-list">
+        {quote.scope.map(item => (
+          <div class="q-check-item">
+            <span class="q-check-icon" set:html={ICONS.check} />
+            {item}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 05 · Ítems -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">05 ·</span>
+        <h2 class="q-section-title">Ítems a cotizar</h2>
+        <span class="q-section-desc">Detalle por concepto</span>
+      </div>
+      <QuoteItemsTable items={quote.items} />
+      <QuoteTotals
+        subtotal={subtotal}
+        discountAmt={discountAmt}
+        discount={quote.discount}
+        total={total}
+      />
+    </section>
+
+    <!-- 06 · Fases -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">06 ·</span>
+        <h2 class="q-section-title">Fases del proyecto</h2>
+        <span class="q-section-desc">Cómo trabajamos</span>
+      </div>
+      <div class="q-phases" id="q-phases-list">
+        {quote.phases.map((phase, i) => (
+          <div class="q-phase">
+            <div class="q-phase-circle">{String(i + 1).padStart(2, '0')}</div>
+            <div>
+              <p class="q-phase-name">{phase.name}</p>
+              <p class="q-phase-time">{phase.time}</p>
+            </div>
+            <ul class="q-phase-bullets">
+              {phase.bullets.map(b => <li>{b}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 07 · Entregables -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">07 ·</span>
+        <h2 class="q-section-title">Entregables</h2>
+        <span class="q-section-desc">Lo que recibe el cliente</span>
+      </div>
+      <div class="q-check-list" id="q-deliverables-list">
+        {quote.deliverables.map(item => (
+          <div class="q-check-item">
+            <span class="q-check-icon" set:html={ICONS.check} />
+            {item}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 08 · No incluye -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">08 ·</span>
+        <h2 class="q-section-title">Lo que no incluye</h2>
+        <span class="q-section-desc">Para evitar malentendidos</span>
+      </div>
+      <div class="q-check-list" id="q-exclusions-list">
+        {quote.exclusions.map(item => (
+          <div class="q-check-item">
+            <span class="q-check-icon q-check-icon--no" set:html={ICONS.x} />
+            {item}
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- 09 · Tiempos -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">09 ·</span>
+        <h2 class="q-section-title">Tiempos estimados</h2>
+        <span class="q-section-desc">A partir del pago inicial</span>
+      </div>
+      <table class="q-timing-table">
+        <thead>
+          <tr>
+            <th style="width: 70%;">Fase</th>
+            <th>Tiempo estimado</th>
+          </tr>
+        </thead>
+        <tbody id="q-timing-body">
+          {quote.timingRows.map(row => (
+            <tr>
+              <td>{row.phase}</td>
+              <td class="q-mono">{row.time}</td>
+            </tr>
+          ))}
+        </tbody>
+        <tfoot>
+          <tr>
+            <td>Total estimado</td>
+            <td class="q-mono" id="q-timing-total">{quote.timingTotal}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <!-- 10 · Forma de pago -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">10 ·</span>
+        <h2 class="q-section-title">Forma de pago</h2>
+        <span class="q-section-desc">Tres pagos</span>
+      </div>
+      <QuotePayment provider={provider} paymentSteps={quote.paymentSteps} />
+    </section>
+
+    <!-- 11 · Condiciones -->
+    <section class="q-section">
+      <div class="q-section-header">
+        <span class="q-section-num">11 ·</span>
+        <h2 class="q-section-title">Condiciones</h2>
+      </div>
+      <ol class="q-conditions-list" id="q-conditions-list">
+        {quote.conditions.map(cond => (
+          <li set:html={cond} />
+        ))}
+      </ol>
+    </section>
+
+    <!-- 12 · Aprobación -->
+    <section class="q-section" style="margin-bottom: 8px;">
+      <div class="q-section-header">
+        <span class="q-section-num">12 ·</span>
+        <h2 class="q-section-title">Aprobación</h2>
+        <span class="q-section-desc">Firma de aceptación</span>
+      </div>
+      <div class="q-sign-block">
+        <div class="q-sign-card">
+          <p class="q-sign-role">Por el cliente</p>
+          <div class="q-sign-line"></div>
+          <p class="q-sign-name">Nombre y firma</p>
+          <p class="q-sign-detail">CC / NIT: __________________<br />Fecha: __________________</p>
+          <span class="q-sign-stamp">&gt; Aceptación</span>
+        </div>
+        <div class="q-sign-card">
+          <p class="q-sign-role">Por el prestador</p>
+          <div class="q-sign-line"></div>
+          <p class="q-sign-name" id="q-sign-name">{provider.name}</p>
+          <p class="q-sign-detail" id="q-sign-detail">
+            CC: {provider.cc}<br />
+            Fecha: <span id="q-sign-date">__________________</span>
+          </p>
+          <span class="q-sign-stamp">&gt; Emitido</span>
+        </div>
+      </div>
+    </section>
+
+  </div>
+  <!-- /quote-body -->
+
+  <QuoteFooter provider={provider} documentNumber={quote.documentNumber} />
+</div>

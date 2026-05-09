@@ -1,0 +1,185 @@
+---
+import SectionCard from '../editor/SectionCard.astro';
+import QuoteTotalsPreview from './QuoteTotalsPreview.astro';
+---
+
+<div class="editor-layout">
+  <div class="form-panel">
+
+    <!-- Documento -->
+    <SectionCard title="Documento" badge="var">
+      <div class="field-grid col3">
+        <div class="field">
+          <label for="qf-doc-number">N.° Cotización</label>
+          <input type="text" id="qf-doc-number" class="mono" placeholder="COT-2026-001" />
+        </div>
+        <div class="field">
+          <label for="qf-status">Estado</label>
+          <select id="qf-status">
+            <option value="draft">Borrador</option>
+            <option value="sent">Enviada</option>
+            <option value="approved">Aprobada</option>
+            <option value="rejected">Rechazada</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="qf-issued">Fecha de emisión</label>
+          <input type="date" id="qf-issued" class="mono" />
+          <span class="field-hint">Vacío = hoy automáticamente</span>
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <label for="qf-project">Nombre del proyecto</label>
+          <input type="text" id="qf-project" placeholder="Sitio web corporativo" />
+        </div>
+        <div class="field">
+          <label for="qf-valid-days">Vigencia (días)</label>
+          <input type="number" id="qf-valid-days" class="mono" min="1" value="15" />
+        </div>
+      </div>
+    </SectionCard>
+
+    <!-- Prestador -->
+    <SectionCard title="Prestador (tú)" badge="const">
+      <p class="field-hint">
+        Datos guardados en configuración.
+        <a href="/configuracion" style="color:var(--emerald);font-weight:600;text-decoration:none;">Editar →</a>
+      </p>
+      <div class="field-grid">
+        <div class="field">
+          <label>Nombre</label>
+          <input type="text" id="qprov-name-disp" readonly />
+        </div>
+        <div class="field">
+          <label>CC / NIT</label>
+          <input type="text" id="qprov-cc-disp" class="mono" readonly />
+        </div>
+      </div>
+    </SectionCard>
+
+    <!-- Cliente -->
+    <SectionCard title="Cliente" badge="var">
+      <div class="field-grid">
+        <div class="field">
+          <label for="qf-client-name">Nombre / Empresa</label>
+          <input type="text" id="qf-client-name" placeholder="Empresa Cliente S.A.S." />
+        </div>
+        <div class="field">
+          <label for="qf-client-nit">NIT</label>
+          <input type="text" id="qf-client-nit" class="mono" placeholder="900.123.456-7" />
+        </div>
+        <div class="field">
+          <label for="qf-client-contact">Contacto</label>
+          <input type="text" id="qf-client-contact" placeholder="Nombre del contacto" />
+        </div>
+        <div class="field">
+          <label for="qf-client-email">Email</label>
+          <input type="email" id="qf-client-email" placeholder="contacto@empresa.co" />
+        </div>
+        <div class="field field-full">
+          <label for="qf-client-address">Dirección</label>
+          <input type="text" id="qf-client-address" placeholder="Calle 72 #10-34, Of. 502" />
+        </div>
+        <div class="field field-full">
+          <label for="qf-client-city">Ciudad</label>
+          <input type="text" id="qf-client-city" placeholder="Medellín, Colombia" />
+        </div>
+      </div>
+    </SectionCard>
+
+    <!-- Resumen y objetivos -->
+    <SectionCard title="Resumen y objetivos" badge="var">
+      <div class="field">
+        <label for="qf-summary">Resumen del proyecto</label>
+        <textarea id="qf-summary" rows="3" placeholder="Descripción general de lo que incluye la propuesta…"></textarea>
+      </div>
+      <div class="field-grid col3">
+        <div class="field">
+          <label for="qf-obj-problem">↳ Problema</label>
+          <textarea id="qf-obj-problem" rows="2" placeholder="Qué se va a resolver…"></textarea>
+        </div>
+        <div class="field">
+          <label for="qf-obj-result">↳ Resultado esperado</label>
+          <textarea id="qf-obj-result" rows="2" placeholder="Qué espera el cliente…"></textarea>
+        </div>
+        <div class="field">
+          <label for="qf-obj-delivery">↳ Entrega final</label>
+          <textarea id="qf-obj-delivery" rows="2" placeholder="Qué se entrega al final…"></textarea>
+        </div>
+      </div>
+    </SectionCard>
+
+    <!-- Ítems -->
+    <SectionCard title="Ítems a cotizar" badge="dyn">
+      <div id="qitems-list" class="items-list"></div>
+      <button class="add-item-btn" id="qadd-item-btn">+ Agregar ítem</button>
+    </SectionCard>
+
+    <!-- Descuento -->
+    <SectionCard title="Descuento" badge="var">
+      <div class="toggle-row">
+        <label>
+          <input type="checkbox" id="qf-disc-enabled" />
+          Aplicar descuento
+        </label>
+      </div>
+      <div class="sub-fields field-grid" id="qdisc-sub-fields">
+        <div class="field">
+          <label for="qf-disc-amount">Monto ($)</label>
+          <input type="number" id="qf-disc-amount" class="mono" min="0" value="0" />
+        </div>
+        <div class="field">
+          <label for="qf-disc-desc">Descripción</label>
+          <input type="text" id="qf-disc-desc" placeholder="Ej: Descuento por pago anticipado" />
+        </div>
+      </div>
+    </SectionCard>
+
+    <!-- Alcance -->
+    <SectionCard title="Alcance general" badge="var">
+      <div class="field">
+        <label for="qf-scope">Ítems de alcance <span class="field-hint">(uno por línea)</span></label>
+        <textarea id="qf-scope" rows="6" placeholder="Consultoría inicial&#10;Análisis del negocio&#10;Planeación de estructura&#10;…"></textarea>
+      </div>
+    </SectionCard>
+
+    <!-- Entregables -->
+    <SectionCard title="Entregables" badge="var">
+      <div class="field">
+        <label for="qf-deliverables">Lo que recibe el cliente <span class="field-hint">(uno por línea)</span></label>
+        <textarea id="qf-deliverables" rows="5" placeholder="Sitio web publicado&#10;Diseño adaptable a celular&#10;…"></textarea>
+      </div>
+    </SectionCard>
+
+    <!-- No incluye -->
+    <SectionCard title="Lo que no incluye" badge="var">
+      <div class="field">
+        <label for="qf-exclusions">Exclusiones <span class="field-hint">(uno por línea)</span></label>
+        <textarea id="qf-exclusions" rows="5" placeholder="Compra de dominio&#10;Compra de hosting&#10;…"></textarea>
+      </div>
+    </SectionCard>
+
+    <!-- Condiciones -->
+    <SectionCard title="Condiciones" badge="var">
+      <div class="field">
+        <label for="qf-conditions">Condiciones generales <span class="field-hint">(una por línea — acepta HTML básico)</span></label>
+        <textarea id="qf-conditions" rows="6" placeholder="<strong>Vigencia.</strong> Esta cotización tiene vigencia de 15 días…"></textarea>
+      </div>
+    </SectionCard>
+
+    <!-- Notas -->
+    <SectionCard title="Notas adicionales" badge="var">
+      <div class="field">
+        <label for="qf-notes">Notas</label>
+        <textarea id="qf-notes" rows="3" placeholder="Observaciones, términos adicionales…"></textarea>
+      </div>
+    </SectionCard>
+
+  </div>
+
+  <!-- Right preview panel -->
+  <div class="preview-panel">
+    <QuoteTotalsPreview />
+  </div>
+</div>

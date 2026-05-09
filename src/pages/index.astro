@@ -147,6 +147,11 @@ import QuickLinks from '../components/home/QuickLinks.astro';
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 14px;
     }
+    /* Last 2 items span the full bottom row when there are 5 */
+    .quick-links > *:nth-child(4),
+    .quick-links > *:nth-child(5) {
+      /* stay in the auto-flow, no special spanning needed */
+    }
 
     .quick-link {
       background: #fff;

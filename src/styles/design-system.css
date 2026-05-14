@@ -1569,6 +1569,20 @@ textarea:focus-visible {
   text-transform: uppercase;
 }
 
+.q-sign-img-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 72px;
+  margin-top: 8px;
+}
+.q-sign-img {
+  max-width: 180px;
+  max-height: 68px;
+  object-fit: contain;
+  display: block;
+}
+
 /* ── Quote responsiveness ── */
 @media (max-width: 900px) {
   .quote-header,

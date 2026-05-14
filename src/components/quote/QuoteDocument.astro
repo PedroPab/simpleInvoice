@@ -239,6 +239,9 @@ const ICONS = {
         </div>
         <div class="q-sign-card">
           <p class="q-sign-role">Por el prestador</p>
+          <div class="q-sign-img-wrap" id="q-sign-img-wrap" style={provider.signatureDataUrl ? '' : 'display:none;'}>
+            <img id="q-sign-img" src={provider.signatureDataUrl || ''} alt={`Firma de ${provider.name}`} class="q-sign-img" />
+          </div>
           <div class="q-sign-line"></div>
           <p class="q-sign-name" id="q-sign-name">{provider.name}</p>
           <p class="q-sign-detail" id="q-sign-detail">

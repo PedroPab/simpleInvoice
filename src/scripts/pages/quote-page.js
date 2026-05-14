@@ -211,6 +211,17 @@ export function initQuotePage() {
     set('q-sign-name', prov.name);
     set('q-sign-date', fmtDate(quote.issuedAt));
 
+    const signWrap = document.getElementById('q-sign-img-wrap');
+    const signImg  = document.getElementById('q-sign-img');
+    if (signWrap && signImg) {
+      if (prov.signatureDataUrl) {
+        signImg.src = prov.signatureDataUrl;
+        signWrap.style.display = '';
+      } else {
+        signWrap.style.display = 'none';
+      }
+    }
+
     // Footer
     set('q-footer-contact', `${prov.website} · ${prov.email} · ${prov.phone}`);
 

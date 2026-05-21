@@ -274,5 +274,21 @@
         "content": "Quedo atento a tu respuesta. Muchas gracias."
       }
     ]
+  },
+  {
+    "templateId": "libre",
+    "name": "Plantilla Libre",
+    "description": "Correo en blanco. Escribe en Markdown: títulos, texto, imágenes y más.",
+    "icon": "📝",
+    "variables": [],
+    "variableLabels": {},
+    "defaultSections": [
+      {
+        "id": "main",
+        "type": "markdown",
+        "visible": true,
+        "content": "# Título del correo\n\nEscribe aquí el contenido de tu correo. Puedes usar **negrilla**, _cursiva_ y mucho más.\n\n## Subtítulo\n\nUn párrafo de ejemplo con un [enlace](https://ejemplo.com) y una imagen a continuación.\n\n![Descripción de la imagen](https://via.placeholder.com/560x200)\n\n---\n\n- Punto uno de la lista\n- Punto dos\n- Punto tres"
+      }
+    ]
   }
 ]

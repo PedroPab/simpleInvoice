@@ -11,7 +11,8 @@ export type EmailSectionType =
   | 'summary-card'
   | 'cta'
   | 'highlight'
-  | 'divider';
+  | 'divider'
+  | 'markdown';
 
 export interface EmailSection {
   id: string;

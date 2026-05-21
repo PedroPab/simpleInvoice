@@ -14,14 +14,6 @@ interface Props {
 }
 
 const { email, provider } = Astro.props;
-
-function esc(v: string | undefined) {
-  return String(v || '')
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
 ---
 
 <div class="email-outer" id="email-root">
@@ -69,6 +61,9 @@ function esc(v: string | undefined) {
           )}
           {section.type === 'divider' && (
             <hr class="em-divider" id={`em-sec-${section.id}`} />
+          )}
+          {section.type === 'markdown' && (
+            <div class="em-markdown" id={`em-sec-${section.id}`} data-md-raw={section.content}></div>
           )}
         </>
       ))}
@@ -295,6 +290,21 @@ function esc(v: string | undefined) {
     color: var(--brand-accent, #17A078);
     text-decoration: none;
   }
+
+  /* ── Markdown section ── */
+  .em-markdown { font-size: 14px; color: #333333; line-height: 1.65; }
+
+  .em-markdown h1 { font-size: 22px; font-weight: 700; color: #0F0F0F; margin: 0 0 14px; line-height: 1.2; }
+  .em-markdown h2 { font-size: 17px; font-weight: 700; color: #0F0F0F; margin: 18px 0 10px; }
+  .em-markdown h3 { font-size: 14px; font-weight: 700; color: #333333; margin: 14px 0 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .em-markdown p  { margin: 0 0 12px; }
+  .em-markdown ul { margin: 0 0 12px; padding-left: 20px; }
+  .em-markdown li { margin-bottom: 4px; }
+  .em-markdown hr { border: none; border-top: 1px solid #eeeeee; margin: 18px 0; }
+  .em-markdown a  { color: var(--brand-accent, #17A078); }
+  .em-markdown img { max-width: 100%; height: auto; display: block; border-radius: 6px; margin: 12px 0; }
+  .em-markdown strong { font-weight: 700; color: #0F0F0F; }
+  .em-markdown em { font-style: italic; }
 
   /* ── Print ── */
   @media print {

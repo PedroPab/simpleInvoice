@@ -139,12 +139,14 @@ export function initEmailEditorPage() {
       cta: 'Botón CTA',
       highlight: 'Destacado',
       divider: 'Separador',
+      markdown: 'Contenido Markdown',
     };
 
     container.innerHTML = sections.map((section, idx) => {
       const label = TYPE_LABELS[section.type] || section.type;
       const isCard = section.type === 'summary-card';
       const isCta = section.type === 'cta';
+      const isMd = section.type === 'markdown';
 
       return `
         <div class="section-card" data-sec-idx="${idx}">
@@ -158,7 +160,14 @@ export function initEmailEditorPage() {
           <div class="section-body ${!section.visible ? 'sec-hidden' : ''}">
             ${isCard ? renderCardFields(section, idx) : ''}
             ${isCta ? renderCtaFields(section, idx) : ''}
-            ${!isCard && !isCta && section.type !== 'divider' ? `
+            ${isMd ? `
+              <div class="field">
+                <label>Contenido Markdown</label>
+                <textarea rows="14" class="ef-sec-content mono" data-sec-idx="${idx}" placeholder="# Título&#10;&#10;Párrafo con **negrilla** e _italics_.&#10;&#10;![alt](https://url-imagen.com/foto.jpg)">${escapeHtml(section.content || '')}</textarea>
+                <span class="field-hint">Soporta: # H1, ## H2, ### H3, **negrita**, _itálica_, [enlace](url), ![imagen](url), - listas, ---</span>
+              </div>
+            ` : ''}
+            ${!isCard && !isCta && !isMd && section.type !== 'divider' ? `
               <div class="field">
                 <label>Contenido</label>
                 <textarea rows="3" class="ef-sec-content" data-sec-idx="${idx}" placeholder="Escribe el contenido…">${escapeHtml(section.content || '')}</textarea>
@@ -283,6 +292,104 @@ export function initEmailEditorPage() {
     return email;
   }
 
+  // ── Markdown parser ─────────────────────────────────────────
+  function inlineMd(text, linkColor) {
+    return text
+      // Images before links so ![…](…) isn't partially matched
+      .replace(/!\[([^\]]*)\]\(([^)]+)\)/g,
+        '<img src="$2" alt="$1" style="max-width:100%;height:auto;display:block;border-radius:6px;margin:12px 0;" />')
+      .replace(/\[([^\]]+)\]\(([^)]+)\)/g,
+        `<a href="$2" style="color:${linkColor};text-decoration:none;">$1</a>`)
+      .replace(/\*\*(.+?)\*\*/g, '<strong style="font-weight:700;color:#0F0F0F;">$1</strong>')
+      .replace(/\*(.+?)\*/g,     '<em style="font-style:italic;">$1</em>')
+      .replace(/_(.+?)_/g,       '<em style="font-style:italic;">$1</em>');
+  }
+
+  function parseMarkdown(md, opts = {}) {
+    const accent = opts.accent || '#17A078';
+    const isExport = opts.isExport || false;
+
+    const lines = md.split('\n');
+    let html = '';
+    let inUl = false;
+
+    const closeList = () => {
+      if (inUl) {
+        html += isExport ? '</ul>' : '</ul>';
+        inUl = false;
+      }
+    };
+
+    for (let i = 0; i < lines.length; i++) {
+      const raw = lines[i];
+      const line = raw.trimEnd();
+
+      // Heading 1
+      if (line.startsWith('# ')) {
+        closeList();
+        const content = inlineMd(line.slice(2), accent);
+        html += isExport
+          ? `<h1 style="font-size:22px;font-weight:700;color:#0F0F0F;margin:0 0 14px;line-height:1.2;font-family:Arial,sans-serif;">${content}</h1>`
+          : `<h1>${content}</h1>`;
+        continue;
+      }
+      // Heading 2
+      if (line.startsWith('## ')) {
+        closeList();
+        const content = inlineMd(line.slice(3), accent);
+        html += isExport
+          ? `<h2 style="font-size:17px;font-weight:700;color:#0F0F0F;margin:18px 0 10px;font-family:Arial,sans-serif;">${content}</h2>`
+          : `<h2>${content}</h2>`;
+        continue;
+      }
+      // Heading 3
+      if (line.startsWith('### ')) {
+        closeList();
+        const content = inlineMd(line.slice(4), accent);
+        html += isExport
+          ? `<h3 style="font-size:14px;font-weight:700;color:#333333;margin:14px 0 8px;text-transform:uppercase;letter-spacing:0.5px;font-family:Arial,sans-serif;">${content}</h3>`
+          : `<h3>${content}</h3>`;
+        continue;
+      }
+      // Horizontal rule
+      if (/^-{3,}$/.test(line.trim())) {
+        closeList();
+        html += isExport
+          ? `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:18px 0;"><tr><td style="border-top:1px solid #eeeeee;font-size:0;line-height:0;">&nbsp;</td></tr></table>`
+          : `<hr />`;
+        continue;
+      }
+      // List item
+      if (/^[-*] /.test(line)) {
+        if (!inUl) {
+          html += isExport
+            ? `<ul style="margin:0 0 12px;padding-left:20px;font-family:Arial,sans-serif;">`
+            : `<ul>`;
+          inUl = true;
+        }
+        const content = inlineMd(line.slice(2), accent);
+        html += isExport
+          ? `<li style="font-size:14px;color:#333333;margin-bottom:4px;line-height:1.65;">${content}</li>`
+          : `<li>${content}</li>`;
+        continue;
+      }
+      // Blank line
+      if (line.trim() === '') {
+        closeList();
+        continue;
+      }
+      // Regular paragraph
+      closeList();
+      const content = inlineMd(line, accent);
+      html += isExport
+        ? `<p style="font-size:14px;color:#333333;line-height:1.65;margin:0 0 12px;font-family:Arial,sans-serif;">${content}</p>`
+        : `<p>${content}</p>`;
+    }
+
+    closeList();
+    return html;
+  }
+
   // ── Variable replacement ─────────────────────────────────────
   function buildVars(email) {
     const vars = {
@@ -351,6 +458,10 @@ export function initEmailEditorPage() {
     }
     if (section.type === 'divider') {
       return '<hr class="em-divider" />';
+    }
+    if (section.type === 'markdown') {
+      const mdHtml = parseMarkdown(replaceVars(section.content || '', vars));
+      return `<div class="em-markdown">${mdHtml}</div>`;
     }
     return '';
   }
@@ -482,6 +593,10 @@ ${email.trackingPixelUrl ? `<img src="${e(email.trackingPixelUrl)}" width="1" he
       return `<table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0;">
         <tr><td style="border-top:1px solid #eeeeee;font-size:0;line-height:0;">&nbsp;</td></tr>
       </table>`;
+    }
+    if (section.type === 'markdown') {
+      const mdHtml = parseMarkdown(rep(section.content || ''), { accent, isExport: true });
+      return `<div style="margin:0 0 8px;">${mdHtml}</div>`;
     }
     return '';
   }
